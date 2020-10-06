@@ -12,7 +12,7 @@
 int main (void)
 {
     static bool ready = 0;
-    static bool partner_ready = 0;
+    static bool opponent_ready = 0;
 
     system_init ();
     led_init ();  //led_set (LED1, 1); <- use to debug
@@ -45,14 +45,14 @@ int main (void)
         }
     }
 
-    // Waits for partner to ready up if they haven't already
-    while (!partner_ready) {
+    // Waits for opponent to ready up if they haven't already
+    while (!opponent_ready) {
         pacer_wait();
         tinygl_update();
 
         if (ir_uart_read_ready_p ()) {
             if (ir_uart_getc () == 'R') {
-                partner_ready = !partner_ready;
+                opponent_ready = !opponent_ready;
             }
         }
     }
