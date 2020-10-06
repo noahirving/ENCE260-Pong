@@ -1,14 +1,71 @@
 #include "system.h"
+#include "pacer.h"
+#include "navswitch.h"
+#include "tinygl.h"
+#include "../fonts/font3x5_1.h"
+#include "led.h"
+#include "ir_uart.h"
+
+#define PACER_RATE 500
+#define MESSAGE_RATE 10
 
 int main (void)
 {
+    static bool ready = 0;
+    static bool partner_ready = 0;
+
     system_init ();
+    led_init ();  //led_set (LED1, 1); <- use to debug
+    led_set (LED1, 0);
 
+    tinygl_init (PACER_RATE);
+    tinygl_font_set (&font3x5_1);
+    tinygl_text_speed_set (MESSAGE_RATE);
+    tinygl_text_mode_set (TINYGL_TEXT_MODE_SCROLL);
+    tinygl_text_dir_set (TINYGL_TEXT_DIR_ROTATE);
 
+    navswitch_init();
+    ir_uart_init ();
+    pacer_init(PACER_RATE);
+
+    tinygl_text ("PONG");
+
+    // Wait for button push to ready up
+    while (!ready) {
+        pacer_wait ();
+        tinygl_update ();
+        navswitch_update ();
+
+        if (navswitch_push_event_p (NAVSWITCH_PUSH)) {
+            ready = !ready;
+            ir_uart_putc('R');
+
+            tinygl_clear();
+            tinygl_text ("READY");
+        }
+    }
+
+    // Waits for partner to ready up if they haven't already
+    while (!partner_ready) {
+        pacer_wait();
+        tinygl_update();
+
+        if (ir_uart_read_ready_p ()) {
+            if (ir_uart_getc () == 'R') {
+                partner_ready = !partner_ready;
+            }
+        }
+    }
+
+    tinygl_text_mode_set (TINYGL_TEXT_MODE_STEP);
+    tinygl_clear ();
+    tinygl_text ("GO");
+
+    // Begin Game
     while (1)
     {
-
-
-
+        pacer_wait();
+        tinygl_update();
     }
+
 }
