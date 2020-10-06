@@ -18,10 +18,10 @@ void increase_opponent_score (void)
 bool check_game_over (void) {
     if (your_score == WIN_SCORE) {
         // you win
-        return 1
+        return 1;
     } else if (opponent_score == WIN_SCORE) {
         // opponent win
-        return 1
+        return 1;
     }
-    return 0
+    return 0;
 }

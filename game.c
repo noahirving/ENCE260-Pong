@@ -8,7 +8,17 @@
 #include "paddle.h"
 
 #define PACER_RATE 500
+#define COUNTDOWN_TIMER_RATE 500
 #define MESSAGE_RATE 10
+
+void display_countdown (char character)
+{
+    char buffer[3];
+    buffer[0] = '0';
+    buffer[1] = character;
+    buffer[2] = '\0';
+    tinygl_text (buffer);
+}
 
 int main (void)
 {
@@ -47,7 +57,7 @@ int main (void)
     }
 
     // Waits for opponent to ready up if they haven't already
-    while (!opponent_ready) {
+    /*while (!opponent_ready) {
         pacer_wait();
         tinygl_update();
 
@@ -56,10 +66,25 @@ int main (void)
                 opponent_ready = !opponent_ready;
             }
         }
-    }
+    }*/
 
     tinygl_text_mode_set (TINYGL_TEXT_MODE_STEP);
     tinygl_clear ();
+
+    int start_countdown = '3';
+    uint16_t pacer_counter = 0;
+    while (start_countdown > '0') {
+        display_countdown (start_countdown);
+        tinygl_update ();
+        pacer_wait ();
+        pacer_counter++;
+
+        if (pacer_counter == COUNTDOWN_TIMER_RATE) {
+            pacer_counter = 0;
+            start_countdown--;
+        }
+    }
+
     tinygl_text ("GO");
 
     // Begin Game
