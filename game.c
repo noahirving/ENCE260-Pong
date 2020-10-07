@@ -20,23 +20,35 @@ void display_countdown (char character)
     tinygl_text (buffer);
 }
 
-int main (void)
+void tinygl_setup ()
 {
-    static bool ready = 0;
-    static bool opponent_ready = 0;
-
-    system_init ();
-    led_init ();  //led_set (LED1, 1); <- use to debug
-    led_set (LED1, 0);
-
     tinygl_init (PACER_RATE);
     tinygl_font_set (&font3x5_1);
     tinygl_text_speed_set (MESSAGE_RATE);
     tinygl_text_mode_set (TINYGL_TEXT_MODE_SCROLL);
     tinygl_text_dir_set (TINYGL_TEXT_DIR_ROTATE);
+}
+
+void init ()
+{
+    system_init ();
+    led_init ();  //led_set (LED1, 1); <- use to debug
+    led_set (LED1, 0);
+    tinygl_setup ();
 
     navswitch_init();
     ir_uart_init ();
+}
+
+
+
+
+int main (void)
+{
+    static bool ready = 0;
+    static bool opponent_ready = 0;
+
+    init ();
     pacer_init(PACER_RATE);
 
     tinygl_text ("PONG");
