@@ -58,11 +58,16 @@ void startup (void)
 
     wait_for (is_ready);
 
-    ir_uart_putc('R');
+    if (ir_uart_read_ready_p) { //Recieved opponent ready
+        ir_uart_getc (); //cleared buffer
+        ir_uart_putc('R'); // send back ready
 
-    tinygl_clear();
-    tinygl_text ("WAITING FOR OPPONENT");
-    wait_for (opponent_is_ready);
+    } else { // Haven't received opponent ready
+        ir_uart_putc('R'); //send ready
+        tinygl_clear();
+        tinygl_text ("WAITING FOR OPPONENT");
+        wait_for (opponent_is_ready); //wait for opponent ready
+    }
 }
 
 void countdown (void)
