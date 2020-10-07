@@ -1,4 +1,5 @@
 #include "system.h"
+#include "ledmat.h"
 #include "pacer.h"
 #include "navswitch.h"
 #include "tinygl.h"
@@ -64,7 +65,7 @@ void startup (void)
     wait_for (opponent_is_ready);
 }
 
-void countdown ()
+void countdown (void)
 {
     uint16_t pacer_counter = 0;
     char counter[] = {'3', '\0'};
