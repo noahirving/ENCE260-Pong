@@ -69,7 +69,7 @@ int main (void)
     }
 
     // Waits for opponent to ready up if they haven't already
-    /*while (!opponent_ready) {
+    while (!opponent_ready) {
         pacer_wait();
         tinygl_update();
 
@@ -78,7 +78,7 @@ int main (void)
                 opponent_ready = !opponent_ready;
             }
         }
-    }*/
+    }
 
     tinygl_text_mode_set (TINYGL_TEXT_MODE_STEP);
     tinygl_clear ();
