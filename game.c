@@ -69,22 +69,18 @@ void startup ()
 
     tinygl_clear();
     tinygl_text ("WAITING FOR OPPONENT");
-    wait_for (opponent_is_ready);
+    //wait_for (opponent_is_ready);
 }
 
-int main (void)
+void countdown ()
 {
-    init ();
-    pacer_init(PACER_RATE);
-    startup ();
+    int start_countdown = '3';
+    uint16_t pacer_counter = 0;
 
     tinygl_text_mode_set (TINYGL_TEXT_MODE_STEP);
     tinygl_clear ();
 
-    int start_countdown = '3';
-    uint16_t pacer_counter = 0;
     while (start_countdown >= '0') {
-
         if (start_countdown == '0') {
             tinygl_text ("GO");
         } else {
@@ -100,8 +96,14 @@ int main (void)
             start_countdown--;
         }
     }
+}
 
-    paddle_init ();
+int main (void)
+{
+    init ();
+    pacer_init(PACER_RATE);
+    startup ();
+    countdown ();
     // Begin Game
     while (1)
     {
@@ -109,13 +111,14 @@ int main (void)
         navswitch_update ();
 
         if (navswitch_push_event_p (NAVSWITCH_SOUTH)) {
-            paddle_shift_left ();
 
+            paddle_shift_left ();
         }
 
         if (navswitch_push_event_p (NAVSWITCH_NORTH)) {
             paddle_shift_right ();
         }
+        ledmat_display_column (get_paddle(), 4);
 
     }
 
