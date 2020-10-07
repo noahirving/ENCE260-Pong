@@ -57,7 +57,7 @@ int main (void)
     }
 
     // Waits for opponent to ready up if they haven't already
-    while (!opponent_ready) {
+    /*while (!opponent_ready) {
         pacer_wait();
         tinygl_update();
 
@@ -66,15 +66,21 @@ int main (void)
                 opponent_ready = !opponent_ready;
             }
         }
-    }
+    }*/
 
     tinygl_text_mode_set (TINYGL_TEXT_MODE_STEP);
     tinygl_clear ();
 
     int start_countdown = '3';
     uint16_t pacer_counter = 0;
-    while (start_countdown > '0') {
-        display_countdown (start_countdown);
+    while (start_countdown >= '0') {
+
+        if (start_countdown == '0') {
+            tinygl_text ("GO");
+        } else {
+            display_countdown (start_countdown);
+        }
+
         tinygl_update ();
         pacer_wait ();
         pacer_counter++;
@@ -85,13 +91,22 @@ int main (void)
         }
     }
 
-    tinygl_text ("GO");
-
+    paddle_init ();
     // Begin Game
     while (1)
     {
         pacer_wait();
-        tinygl_update();
+        navswitch_update ();
+
+        if (navswitch_push_event_p (NAVSWITCH_SOUTH)) {
+            paddle_shift_left ();
+
+        }
+
+        if (navswitch_push_event_p (NAVSWITCH_NORTH)) {
+            paddle_shift_right ();
+        }
+
     }
 
 }
