@@ -36,7 +36,7 @@ uint8_t get_paddle (void)
     return paddle;
 }
 
-void paddle_update ()
+void paddle_update (void)
 {
     for (uint8_t current_row = 0; current_row < LEDMAT_ROWS_NUM; current_row++) {
         if ((paddle >> current_row) & 1) {
@@ -47,7 +47,7 @@ void paddle_update ()
     }
 }
 
-void paddle_init ()
+void paddle_init (void)
 {
     for (uint8_t col_num = 0; col_num < LEDMAT_COLS_NUM; col_num++) {
         if (col_num == 4) {
@@ -60,7 +60,7 @@ void paddle_init ()
     paddle_update ();
 }
 
-void paddle_shift_left () {
+void paddle_shift_left (void) {
     if (paddle_position < MAX_POSITION) {
         paddle_position++;
         paddle = get_paddle ();
@@ -68,7 +68,7 @@ void paddle_shift_left () {
     }
 }
 
-void paddle_shift_right () {
+void paddle_shift_right (void) {
     if (paddle_position > MIN_POSITION) {
         paddle_position--;
         paddle = get_paddle ();
