@@ -1,15 +1,4 @@
-#include "system.h"
-#include "pacer.h"
-#include "navswitch.h"
-#include "tinygl.h"
-#include "../fonts/font3x5_1.h"
-#include "led.h"
-#include "ir_uart.h"
-#include "paddle.h"
-
-#define PACER_RATE 500
-#define COUNTDOWN_TIMER_RATE 500
-#define MESSAGE_RATE 10
+#include "game.h"
 
 void display_countdown (char character)
 {
@@ -20,7 +9,7 @@ void display_countdown (char character)
     tinygl_text (buffer);
 }
 
-void tinygl_setup ()
+void tinygl_setup (void)
 {
     tinygl_init (PACER_RATE);
     tinygl_font_set (&font3x5_1);
@@ -28,7 +17,7 @@ void tinygl_setup ()
     tinygl_text_dir_set (TINYGL_TEXT_DIR_ROTATE);
 }
 
-void init ()
+void game_init (void)
 {
     system_init ();
     led_init ();  //led_set (LED1, 1); <- use to debug
@@ -39,26 +28,26 @@ void init ()
     ir_uart_init ();
 }
 
-uint8_t is_ready ()
+uint8_t is_ready (void)
 {
     navswitch_update ();
     return navswitch_push_event_p (NAVSWITCH_PUSH);
 }
 
 
-uint8_t opponent_is_ready ()
+uint8_t opponent_is_ready (void)
 {
     return ir_uart_read_ready_p () && ir_uart_getc () == 'R';
 }
 
-void wait_for (uint8_t (*func)()) {
+void wait_for (uint8_t (*func)(void)) {
     while (!(*func) ()) {
         pacer_wait();
         tinygl_update ();
     }
 }
 
-void startup ()
+void startup (void)
 {
     tinygl_text_mode_set (TINYGL_TEXT_MODE_SCROLL);
     tinygl_text ("READY UP");
@@ -100,7 +89,8 @@ void countdown ()
 
 int main (void)
 {
-    init ();
+
+    game_init ();
     pacer_init(PACER_RATE);
     startup ();
     countdown ();
@@ -121,5 +111,4 @@ int main (void)
         ledmat_display_column (get_paddle(), 4);
 
     }
-
 }

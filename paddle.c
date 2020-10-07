@@ -18,13 +18,13 @@ uint8_t get_paddle (void)
     return paddle;
 }
 
-void paddle_shift_left () {
+void paddle_shift_left (void) {
     if (paddle_position < MAX_POSITION) {
         paddle_position++;
     }
 }
 
-void paddle_shift_right () {
+void paddle_shift_right (void) {
     if (paddle_position > MIN_POSITION) {
         paddle_position--;
    }
