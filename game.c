@@ -58,7 +58,7 @@ void startup (void)
 
     wait_for (is_ready);
 
-    if (ir_uart_read_ready_p) { //Recieved opponent ready
+    if (ir_uart_read_ready_p ()) { //Recieved opponent ready
         ir_uart_getc (); //cleared buffer
         ir_uart_putc('R'); // send back ready
 
