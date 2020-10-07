@@ -1,10 +1,4 @@
-#include "system.h"
-#include "pio.h"
-
-#define PADDLE_LENGTH 3
-#define BOARD_WIDTH 7
-#define MIN_POSITION 0
-#define MAX_POSITION (BOARD_WIDTH - PADDLE_LENGTH)
+#include "paddle.h"
 
 /** Define PIO pins driving LED matrix rows.  */
 static const pio_t rows[] =
