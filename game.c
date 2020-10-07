@@ -25,7 +25,6 @@ void tinygl_setup ()
     tinygl_init (PACER_RATE);
     tinygl_font_set (&font3x5_1);
     tinygl_text_speed_set (MESSAGE_RATE);
-    tinygl_text_mode_set (TINYGL_TEXT_MODE_SCROLL);
     tinygl_text_dir_set (TINYGL_TEXT_DIR_ROTATE);
 }
 
@@ -40,45 +39,44 @@ void init ()
     ir_uart_init ();
 }
 
+uint8_t is_ready ()
+{
+    navswitch_update ();
+    return navswitch_push_event_p (NAVSWITCH_PUSH);
+}
 
 
+uint8_t opponent_is_ready ()
+{
+    return ir_uart_read_ready_p () && ir_uart_getc () == 'R';
+}
+
+void wait_for (uint8_t (*func)()) {
+    while (!(*func) ()) {
+        pacer_wait();
+        tinygl_update ();
+    }
+}
+
+void startup ()
+{
+    tinygl_text_mode_set (TINYGL_TEXT_MODE_SCROLL);
+    tinygl_text ("READY UP");
+
+    wait_for (is_ready);
+
+    ir_uart_putc('R');
+
+    tinygl_clear();
+    tinygl_text ("WAITING FOR OPPONENT");
+    wait_for (opponent_is_ready);
+}
 
 int main (void)
 {
-    static bool ready = 0;
-    static bool opponent_ready = 0;
-
     init ();
     pacer_init(PACER_RATE);
-
-    tinygl_text ("PONG");
-
-    // Wait for button push to ready up
-    while (!ready) {
-        pacer_wait ();
-        tinygl_update ();
-        navswitch_update ();
-
-        if (navswitch_push_event_p (NAVSWITCH_PUSH)) {
-            ready = !ready;
-            ir_uart_putc('R');
-
-            tinygl_clear();
-            tinygl_text ("READY");
-        }
-    }
-
-    // Waits for opponent to ready up if they haven't already
-    while (!opponent_ready) {
-        pacer_wait();
-        tinygl_update();
-
-        if (ir_uart_read_ready_p ()) {
-            if (ir_uart_getc () == 'R') {
-                opponent_ready = !opponent_ready;
-            }
-        }
-    }
+    startup ();
 
     tinygl_text_mode_set (TINYGL_TEXT_MODE_STEP);
     tinygl_clear ();
