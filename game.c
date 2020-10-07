@@ -69,7 +69,7 @@ void startup ()
 
     tinygl_clear();
     tinygl_text ("WAITING FOR OPPONENT");
-    //wait_for (opponent_is_ready);
+    wait_for (opponent_is_ready);
 }
 
 void countdown ()
