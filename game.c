@@ -12,15 +12,6 @@
 #define COUNTDOWN_TIMER_RATE 500
 #define MESSAGE_RATE 10
 
-void display_countdown (char character)
-{
-    char buffer[3];
-    buffer[0] = '0';
-    buffer[1] = character;
-    buffer[2] = '\0';
-    tinygl_text (buffer);
-}
-
 void tinygl_setup (void)
 {
     tinygl_init (PACER_RATE);
@@ -52,7 +43,8 @@ uint8_t opponent_is_ready (void)
     return ir_uart_read_ready_p () && ir_uart_getc () == 'R';
 }
 
-void wait_for (uint8_t (*func)(void)) {
+void wait_for (uint8_t (*func)(void))
+{
     while (!(*func) ()) {
         pacer_wait();
         tinygl_update ();
@@ -75,26 +67,26 @@ void startup (void)
 
 void countdown (void)
 {
-    int start_countdown = '3';
     uint16_t pacer_counter = 0;
+    char counter[] = {'3', '\0'};
 
     tinygl_text_mode_set (TINYGL_TEXT_MODE_STEP);
     tinygl_clear ();
 
-    while (start_countdown >= '0') {
-        if (start_countdown == '0') {
-            tinygl_text ("GO");
-        } else {
-            display_countdown (start_countdown);
-        }
-
+    while (counter[0] >= '0') {
         tinygl_update ();
         pacer_wait ();
         pacer_counter++;
 
         if (pacer_counter == COUNTDOWN_TIMER_RATE) {
             pacer_counter = 0;
-            start_countdown--;
+            counter[0]--;
+        }
+
+        if (counter[0] == '0') {
+            tinygl_text ("GO");
+        } else {
+            tinygl_text (counter);
         }
     }
 }
