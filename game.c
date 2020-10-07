@@ -1,4 +1,15 @@
-#include "game.h"
+#include "system.h"
+#include "pacer.h"
+#include "navswitch.h"
+#include "tinygl.h"
+#include "../fonts/font3x5_1.h"
+#include "led.h"
+#include "ir_uart.h"
+#include "paddle.h"
+
+#define PACER_RATE 500
+#define COUNTDOWN_TIMER_RATE 500
+#define MESSAGE_RATE 10
 
 void display_countdown (char character)
 {
