@@ -11,6 +11,7 @@
 #define PACER_RATE 500
 #define COUNTDOWN_TIMER_RATE 500
 #define MESSAGE_RATE 10
+#define PADDLE_PERIOD 80
 
 void tinygl_setup (void)
 {
@@ -103,20 +104,14 @@ int main (void)
     pacer_init(PACER_RATE);
     startup ();
     countdown ();
+    paddle_set_period (PADDLE_PERIOD);
+
     // Begin Game
     while (1)
     {
         pacer_wait();
         navswitch_update ();
-
-        if (navswitch_push_event_p (NAVSWITCH_SOUTH)) {
-
-            paddle_shift_left ();
-        }
-
-        if (navswitch_push_event_p (NAVSWITCH_NORTH)) {
-            paddle_shift_right ();
-        }
+        paddle_update ();
         ledmat_display_column (get_paddle(), 4);
 
     }
