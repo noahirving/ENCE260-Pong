@@ -104,7 +104,8 @@ int main (void)
     pacer_init(PACER_RATE);
     startup ();
     countdown ();
-    paddle_set_period (PADDLE_PERIOD);
+    paddle_init (3, 80);
+
 
     // Begin Game
     while (1)
@@ -113,6 +114,5 @@ int main (void)
         navswitch_update ();
         paddle_update ();
         ledmat_display_column (get_paddle(), 4);
-
     }
 }
