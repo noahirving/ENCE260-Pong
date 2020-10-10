@@ -137,7 +137,7 @@ int main (void)
 
         // Only performs update for the player who has the ball on their screen
         if (ball_on_screen) {
-            ball_update ();
+            ball_update_position ();
             ledmat_display_column (get_ball(), get_ball_column()); // display ball
         }
 

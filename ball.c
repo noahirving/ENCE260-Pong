@@ -33,7 +33,7 @@ void receive_ball (void)
 }
 
 /** Updates the balls position based on its direction */
-void ball_update (void)
+void ball_update_position (void)
 {
     // change position based on vector
 }

@@ -13,7 +13,7 @@ uint8_t check_ball_hit (void);
 void ball_init (void);
 
 /** Updates the balls position based on its direction */
-void ball_update (void);
+void ball_update_position (void);
 
 /** Sets the direction of the ball */
 void ball_set_vector (int vector);
