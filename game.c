@@ -25,6 +25,7 @@ void tinygl_setup (void)
     tinygl_text_dir_set (TINYGL_TEXT_DIR_ROTATE);
 }
 
+
 /** Initialize system and drivers*/
 void game_init (void)
 {
@@ -118,18 +119,21 @@ int main (void)
 
     game_init ();
     pacer_init(PACER_RATE);
-    startup ();
+    //startup ();
 
     // Only display ball for the player who is starting
     if (starting_player) {
         ball_init ();
         ball_on_screen = true;
     }
-
+    ball_on_screen = true;
     countdown ();
-    paddle_init (3, 80);
+    paddle_init (3, 40);
 
-
+    uint16_t ball_counter = 0;
+    Vector direction = {1, 1};
+    Vector position = {10, 10};
+    Ball my_ball = {&direction, &position, 10};
     // Begin Game
     while (1)
     {
@@ -138,12 +142,16 @@ int main (void)
 
         // Only performs update for the player who has the ball on their screen
         if (ball_on_screen) {
-            ball_update_position ();
-            ledmat_display_column (get_ball(), get_ball_column()); // display ball
+            if (ball_counter >= 40) {
+                ball_update_position (&my_ball);
+                ball_counter = 0;
+            }
+            ledmat_display_column (1 << (position.x / 10), position.y / 10); // display ball
         }
 
         pacer_wait ();
         paddle_update ();
         ledmat_display_column (get_paddle(), 4); // display paddle
+        ball_counter ++;
     }
 }

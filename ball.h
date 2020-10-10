@@ -4,24 +4,37 @@
 #include "paddle.h"
 #include "system.h"
 
+typedef struct {
+    int8_t x;
+    int8_t y;
+} Vector;
+
+typedef struct {
+    Vector *direction;
+    Vector *position;
+    uint8_t speed;
+} Ball;
+
+Ball new_ball(Vector *direction, Vector *position, uint8_t speed);
+
 /** Checks if the ball has hit the paddle. Occurs when the ball is in the
  * column ahead of the paddle
  * @return 1 if the ball hits the paddle otherwise 0 */
-uint8_t check_ball_hit (void);
+uint8_t check_ball_hit (Ball *self);
 
 /** Initializes the ball to be at the centre of the board */
 void ball_init (void);
 
 /** Updates the balls position based on its direction */
-void ball_update_position (void);
+void ball_update_position (Ball *self);
 
 /** Sets the direction of the ball */
 void ball_set_vector (int vector);
 
 /** Gets the position of the ball as a bit pattern */
-uint8_t get_ball (void);
+uint8_t get_ball (Ball *self);
 
 /** Gets the column of the ball */
-uint8_t get_ball_column (void);
+uint8_t get_ball_column (Ball *self);
 
 #endif
