@@ -19,6 +19,7 @@ static uint16_t paddle_counter = 0;
 static uint16_t move_period = 0;
 static uint8_t max_position = 0;
 
+
 /** Shifts the paddle position to the left if it does not move
     beyond the max position. */
 static void paddle_shift_left (void)
@@ -27,6 +28,7 @@ static void paddle_shift_left (void)
         paddle_position++;
     }
 }
+
 
 /** Shifts the paddle position to the right if it does not move
     beyond the min position. */
@@ -37,7 +39,10 @@ static void paddle_shift_right (void)
    }
 }
 
-/** Initializes the paddle. */
+
+/** Initializes the paddle.
+ * @param new_length length of the paddle
+ * @param new_period paddle update period */
 void paddle_init (uint8_t new_length, uint16_t new_period)
 {
     paddle_set_length (new_length);
@@ -48,7 +53,7 @@ void paddle_init (uint8_t new_length, uint16_t new_period)
 }
 
 
-/* Updates the paddles position when the navswitch is pushed. */
+/** Updates the paddles position when the navswitch is pushed. */
 void paddle_update (void)
 {
     /* If the counter has reached the period.
@@ -70,7 +75,8 @@ void paddle_update (void)
     }
 }
 
-/* Gets the paddle as a single row bitmap. */
+
+/** Gets the paddle as a single row bitmap. */
 uint8_t get_paddle (void)
 {
     uint8_t paddle = 0;
@@ -82,7 +88,7 @@ uint8_t get_paddle (void)
 
 
 /** Changes the length of the paddle.
-    @param new length of paddle. */
+ * @param new length of paddle. */
 void paddle_set_length (uint8_t new_length)
 {
     /* Sets the new max position. */
@@ -98,8 +104,9 @@ void paddle_set_length (uint8_t new_length)
     paddle_length = new_length;
 }
 
-/* Sets the period of the paddle movement.
-   @param new period of the paddle. */
+
+/** Sets the period of the paddle movement.
+ * @param new period of the paddle. */
 void paddle_set_period (uint16_t period)
 {
     move_period = period;
