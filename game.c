@@ -219,6 +219,7 @@ void display_score (void)
     }
 }
 
+
 int main (void)
 {
     bool ball_on_screen = false;

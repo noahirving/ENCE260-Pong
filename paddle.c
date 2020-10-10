@@ -19,6 +19,7 @@ static uint16_t paddle_counter = 0;
 static uint16_t move_period = 0;
 static uint8_t max_position = 0;
 
+
 /** Shifts the paddle position to the left if it does not move
     beyond the max position. */
 static void paddle_shift_left (void)
@@ -28,6 +29,7 @@ static void paddle_shift_left (void)
     }
 }
 
+
 /** Shifts the paddle position to the right if it does not move
     beyond the min position. */
 static void paddle_shift_right (void)
@@ -36,6 +38,7 @@ static void paddle_shift_right (void)
         paddle_position--;
    }
 }
+
 
 /** Initializes the paddle.
  * @param new_length length of the paddle
@@ -72,6 +75,7 @@ void paddle_update (void)
     }
 }
 
+
 /** Gets the paddle as a single row bitmap. */
 uint8_t get_paddle (void)
 {
@@ -99,6 +103,7 @@ void paddle_set_length (uint8_t new_length)
     /* Sets the new max length. */
     paddle_length = new_length;
 }
+
 
 /** Sets the period of the paddle movement.
  * @param new period of the paddle. */
