@@ -127,7 +127,7 @@ int main (void)
     }
 
     countdown ();
-    paddle_init (3, 80);
+    paddle_init (3, 40);
 
 
     // Begin Game
@@ -139,7 +139,18 @@ int main (void)
         // Only performs update for the player who has the ball on their screen
         if (ball_on_screen) {
             ball_update_position ();
+
+            if (get_ball_column () == 0 // TODO: Check if ball is travelling to opponent) {
+                transfer_ball ();
+                ball_on_screen = false;
+
             ledmat_display_column (get_ball(), get_ball_column()); // display ball
+        } else {
+            ledmat_display_column (0, 0); // Removes ball from display
+
+        if (ir_uart_read_ready_p ()) {
+            receive_ball ();
+            ball_on_screen = true;
         }
 
         pacer_wait ();

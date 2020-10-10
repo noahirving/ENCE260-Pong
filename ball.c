@@ -23,13 +23,15 @@ void ball_init (void)
 /** Transfers the ball to the opponent's screen */
 void transfer_ball (void)
 {
-
+    ir_uart_putc (0); // Transfer ball position and vecotr as single character
 }
 
 /** Receives the ball from the opponent's screen */
 void receive_ball (void)
 {
-
+    char received_ball = ir_uart_getc ();
+    ball_col = 0;
+    ball_row = 0 // row ball was received on
 }
 
 /** Updates the balls position based on its direction */
