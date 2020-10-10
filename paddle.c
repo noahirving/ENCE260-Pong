@@ -3,7 +3,6 @@
     @date
     @brief  Paddle controller.
 */
-#include "system.h"
 #include "pio.h"
 #include "navswitch.h"
 #include "paddle.h"

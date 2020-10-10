@@ -1,5 +1,6 @@
 #ifndef PADDLE_H
 #define PADDLE_H
+#include "system.h"
 
 void paddle_set_length (uint8_t length);
 void paddle_set_period (uint16_t period);
