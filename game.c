@@ -35,8 +35,8 @@ void tinygl_setup (void)
 void game_init (void)
 {
     system_init ();
-    //led_init ();  //led_set (LED1, 1); <- use to debug
-    //led_set (LED1, 0);
+    led_init ();  //led_set (LED1, 1); <- use to debug
+    led_set (LED1, 0);
     tinygl_setup ();
 
     navswitch_init();
@@ -89,7 +89,7 @@ void startup (void)
         ir_uart_putc(READY);
         tinygl_clear();
         tinygl_text ("WAITING FOR OPPONENT");
-        wait_for (opponent_is_ready);
+        //wait_for (opponent_is_ready);
         starting_player = true;
     }
 }
@@ -132,7 +132,7 @@ bool round_over (Ball *my_ball)
 {
     bool round_finished = false;
 
-    if (get_ball_column (my_ball) == 5) {
+    if (get_ball_column (my_ball) == 4) {
         /* Column 5 is the column with the paddle.
         * If the ball is here it has gone past the paddle */
         round_finished = true;
@@ -157,7 +157,6 @@ bool round_over (Ball *my_ball)
 /** Starts a single round. Plays until one of the players miss the ball */
 void play_round (void)
 {
-    bool round_finished = false;
     bool ball_on_screen = false;
 
     /* Only display ball for the player who is starting */
@@ -174,17 +173,13 @@ void play_round (void)
     Vector position = {10, 10};
     Ball my_ball = {&direction, &position, 10};
     // Begin Game
-    while (!round_finished) {
+    while (!round_over (&my_ball)) {
         pacer_wait();
         navswitch_update ();
 
-        if (round_over (&my_ball)) {
-            continue;
-        }
-
         // Only performs update for the player who has the ball on their screen
         if (ball_on_screen) {
-            if (ball_counter >= 40) {
+            if (ball_counter >= 80) {
                 ball_update_position (&my_ball);
                 ball_counter = 0;
             }
@@ -193,9 +188,10 @@ void play_round (void)
                 transfer_ball ();
                 ball_on_screen = false;
 
-            } else {
-                ledmat_display_column (get_ball(&my_ball), get_ball_column(&my_ball)); // display ball
+
             }
+
+            ledmat_display_column (get_ball(&my_ball), get_ball_column(&my_ball)); // display ball
         }
 
         /* Ball has reached edge of opponents screen and transfered it over */
@@ -233,6 +229,7 @@ int main (void)
     }
 
     while (1) {
+        pacer_wait ();
         tinygl_update ();
     }
 }

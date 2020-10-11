@@ -69,6 +69,7 @@ void display_score (void)
     score[4] = get_opponent_score() + '0';
 
     tinygl_text_mode_set (TINYGL_TEXT_MODE_SCROLL);
+    tinygl_clear ();
     tinygl_text (score);
 
     // 10 characters per second. Display 7 characters
@@ -76,6 +77,7 @@ void display_score (void)
     uint16_t pacer_count = 0;
 
     while (pacer_count < 3500) {
+        pacer_wait ();
         tinygl_update ();
         pacer_count++;
     }
