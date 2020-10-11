@@ -186,19 +186,16 @@ void play_round (void)
                 }
                 ball_bounce_wall (&my_ball);
 
+
+                if (ball_is_transferable (&my_ball)) {
+                    transfer_ball (&my_ball);
+                    ball_on_screen = false;
+                }
+
             }
-
-
-            ledmat_display_column (get_ball(&my_ball), get_ball_column(&my_ball));
-
-            /*
-            if (get_ball_column (&my_ball) == 0) { // TODO: Check if ball is travelling to opponent) {
-                transfer_ball ();
-                ball_on_screen = false;
-
-            } else {
-                ledmat_display_column (get_ball(&my_ball), get_ball_column(&my_ball)); // display ball
-            }*/
+            if (ball_on_screen) {
+                ledmat_display_column (get_ball(&my_ball), get_ball_column(&my_ball));
+            }
         }
 
         if (ir_uart_read_ready_p ()) {

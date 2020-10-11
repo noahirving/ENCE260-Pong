@@ -35,6 +35,11 @@ static void invert_x_direction (Ball *self)
     self->direction_vector = -(self->direction_vector - NUM_DIRECTIONS / 2) + NUM_DIRECTIONS / 2;
 }
 
+bool ball_is_transferable (Ball *self)
+{
+    return self->position->y  < MIN_Y && self->y_direction < 0;
+}
+
 /** Transfers the ball to the opponent's screen */
 void transfer_ball (Ball *self)
 {

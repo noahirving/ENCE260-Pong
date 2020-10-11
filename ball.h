@@ -34,6 +34,7 @@ void ball_bounce_wall (Ball * self);
 /** Updates the balls position based on its direction */
 void ball_update_position (Ball *self);
 
+bool ball_is_transferable (Ball *self);
 /** Transfers the ball to the opponent's screen */
 void transfer_ball (Ball *self);
 
