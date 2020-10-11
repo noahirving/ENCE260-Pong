@@ -11,8 +11,8 @@ static uint8_t your_score = 0;
 static uint8_t opponent_score = 0;
 
 
-/** If you have lost the round, increases the opponent's score
- * and notifies them that the round is over */
+/** Increments opponent's score by 1 and notifies them that
+ * the round is over */
 void lost_round (void)
 {
     opponent_score++;
@@ -20,7 +20,7 @@ void lost_round (void)
 }
 
 
-/** If opponent lost the round, increase your score */
+/** Increments your score by 1 */
 void opponent_lost_round (void)
 {
     your_score++;
@@ -28,7 +28,7 @@ void opponent_lost_round (void)
 
 /** Gets your score
  * @return your score */
-uint8_t get_your_score (void)
+static uint8_t get_your_score (void)
 {
     return your_score;
 }
@@ -36,7 +36,7 @@ uint8_t get_your_score (void)
 
 /** Gets your opponent's score
  * @return your opponent's score */
-uint8_t get_opponent_score (void)
+static uint8_t get_opponent_score (void)
 {
     return opponent_score;
 }
@@ -46,30 +46,22 @@ uint8_t get_opponent_score (void)
  * @return 1 if the game has finsihed, otherwise 0 */
 bool game_finished (void)
 {
-    if (your_score == WIN_SCORE || opponent_score == WIN_SCORE) {
-        return true;
-    } else {
-        return false;
-    }
+    return (your_score == WIN_SCORE || opponent_score == WIN_SCORE);
 }
 
 
 /** Checks if your opponent has won the game
  * @return 1 if your opponent won, othwerwise 0 */
-bool opponent_won (void)
+static bool opponent_won (void)
 {
-    if (opponent_score == WIN_SCORE) {
-        return true;
-    } else {
-        return false;
-    }
+    return (opponent_score == WIN_SCORE);
 }
 
 
 /** Displays the score after the round has ended */
 void display_score (void)
 {
-    /* Format of the score display. '#' indicates the number score of each player */
+    /* Format of the score display. '#' is a placeholder for the score of each player */
     char score[] = {' ', ' ', '#', '-', '#', ' ', ' '};
     score[2] = get_your_score() + '0';
     score[4] = get_opponent_score() + '0';
@@ -94,4 +86,21 @@ void display_score (void)
 bool is_score (char message)
 {
     return (message >> 7) & 1;
+}
+
+
+/** Checks who won the game and displays corresponding message */
+void end_game (void)
+{
+    /* Leading spaces in text for formatting */
+    if (opponent_won ()) {
+        tinygl_text ("  YOU LOST");
+    } else {
+        tinygl_text ("  YOU WON");
+    }
+
+    while (1) {
+        pacer_wait ();
+        tinygl_update ();
+    }
 }

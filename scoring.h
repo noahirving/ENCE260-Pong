@@ -3,22 +3,13 @@
 
 #include "system.h"
 
-/** Increments your score by 1 */
+/** Increments opponent's score by 1 and notifies them that
+ * the round is over */
 void lost_round (void);
 
 
-/** Increments opponent's score by 1 */
+/** Increments your score by 1 */
 void opponent_lost_round (void);
-
-
-/** Gets your score
- * @return your score */
-uint8_t get_your_score (void);
-
-
-/** Gets your opponent's score
- * @return your opponent's score */
-uint8_t get_opponent_score (void);
 
 
 /** Checks if the game is finished by seeing if the win score has been reached
@@ -26,17 +17,17 @@ uint8_t get_opponent_score (void);
 bool game_finished (void);
 
 
-/** Checks if your opponent has won the game
- * @return 1 if your opponent won, othwerwise 0 */
-bool opponent_won (void);
-
-
 /** Displays the score after the round has ended */
 void display_score (void);
+
 
 /** Checks if a received message is score related by checking the largest bit (control bit)
  * @param message The received message
  * @return true if the control bit is 1, otherwise false */
 bool is_score (char message);
+
+
+/** Checks who won the game and displays corresponding message */
+void end_game (void);
 
 #endif

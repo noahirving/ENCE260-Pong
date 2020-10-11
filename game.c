@@ -12,7 +12,7 @@
 
 #define PACER_RATE 500
 #define COUNTDOWN_TIMER_RATE 500
-#define MESSAGE_RATE 10
+#define MESSAGE_RATE 20
 #define PADDLE_PERIOD 40
 #define READY 'R'
 
@@ -214,15 +214,5 @@ int main (void)
         display_score ();
     }
 
-    /* Leading spaces in text for formatting */
-    if (opponent_won ()) {
-        tinygl_text ("  YOU LOST");
-    } else {
-        tinygl_text ("  YOU WON");
-    }
-
-    while (1) {
-        pacer_wait ();
-        tinygl_update ();
-    }
+    end_game ();
 }
