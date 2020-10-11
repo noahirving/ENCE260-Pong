@@ -22,6 +22,14 @@ Ball new_ball(Vector *direction, Vector *position, uint8_t speed);
  * @return 1 if the ball hits the paddle otherwise 0 */
 uint8_t check_ball_hit (Ball *self);
 
+bool can_collide (Ball *self);
+
+bool is_colliding (Ball *self,  uint8_t paddle_bitmap);
+
+void ball_bounce_paddle (Ball *self);
+
+void ball_bounce_wall (Ball * self);
+
 /** Initializes the ball to be at the centre of the board */
 void ball_init (void);
 

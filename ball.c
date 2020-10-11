@@ -55,7 +55,7 @@ bool is_ball (char message)
 
 bool can_collide (Ball *self)
 {
-    return get_ball_column (self) == MAX_Y;
+    return self->position->y >= MAX_Y;
 }
 
 bool is_colliding (Ball *self,  uint8_t paddle_bitmap)
@@ -63,14 +63,18 @@ bool is_colliding (Ball *self,  uint8_t paddle_bitmap)
     return get_ball (self) & paddle_bitmap;
 }
 
-
-
-/** Updates the balls position based on its direction */
-void ball_update_position (Ball *self)
+void ball_bounce_paddle (Ball *self)
 {
-    self->position->x += self->direction->x * self->speed;
-    self->position->y += self->direction->y * self->speed;
+    self->position->x -= self->direction->x * self->speed;
+    self->position->y -= self->direction->y * self->speed;
 
+    self->direction->y = -self->direction->y;
+
+    ball_update_position (self);
+}
+
+void ball_bounce_wall (Ball * self)
+{
     if (self->position->x <= MIN_X) {
         self->position->x = MIN_X;
         self->direction->x = -self->direction->x;
@@ -78,12 +82,19 @@ void ball_update_position (Ball *self)
         self->position->x = MAX_X;
         self->direction->x = -self->direction->x;
     }
+}
 
+/** Updates the balls position based on its direction */
+void ball_update_position (Ball *self)
+{
+    self->position->x += self->direction->x * self->speed;
+    self->position->y += self->direction->y * self->speed;
+
+
+
+    // TODO: Remove for transfering
     if (self->position->y <= MIN_Y) {
         self->position->y = MIN_Y;
-        self->direction->y = -self->direction->y;
-    } else if (self->position->y >= MAX_Y) {
-        self->position->y = MAX_Y;
         self->direction->y = -self->direction->y;
     }
 }

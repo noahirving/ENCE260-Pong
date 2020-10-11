@@ -157,6 +157,7 @@ bool round_over (Ball *my_ball)
 /** Starts a single round. Plays until one of the players miss the ball */
 void play_round (void)
 {
+    bool round_running = true;
     bool ball_on_screen = false;
 
     /* Only display ball for the player who is starting */
@@ -173,25 +174,40 @@ void play_round (void)
     Vector position = {10, 10};
     Ball my_ball = {&direction, &position, 10};
     // Begin Game
-    while (!round_over (&my_ball)) {
+    while (!round_running) {
         pacer_wait();
         navswitch_update ();
 
         // Only performs update for the player who has the ball on their screen
         if (ball_on_screen) {
-            if (ball_counter >= 80) {
-                ball_update_position (&my_ball);
+            if (ball_counter >= 40) {
                 ball_counter = 0;
+
+                ball_update_position (&my_ball);
+                if (can_collide (&my_ball)) {
+                    if (is_colliding (&my_ball, get_paddle ())) {
+                        ball_bounce_paddle (&my_ball);
+                    }
+                    else {
+                        round_running = false;
+                        ball_on_screen = false;
+                    }
+                }
+                ball_bounce_wall (&my_ball);
+
             }
 
+
+            ledmat_display_column (get_ball(&my_ball), get_ball_column(&my_ball));
+
+            /*
             if (get_ball_column (&my_ball) == 0) { // TODO: Check if ball is travelling to opponent) {
                 transfer_ball ();
                 ball_on_screen = false;
 
-
-            }
-
-            ledmat_display_column (get_ball(&my_ball), get_ball_column(&my_ball)); // display ball
+            } else {
+                ledmat_display_column (get_ball(&my_ball), get_ball_column(&my_ball)); // display ball
+            }*/
         }
 
         /* Ball has reached edge of opponents screen and transfered it over */
