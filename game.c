@@ -35,12 +35,14 @@ void tinygl_setup (void)
 void game_init (void)
 {
     system_init ();
-    led_init ();  //led_set (LED1, 1); <- use to debug
-    led_set (LED1, 0);
+    //led_init ();  //led_set (LED1, 1); <- use to debug
+    //led_set (LED1, 0);
     tinygl_setup ();
 
     navswitch_init();
     ir_uart_init ();
+
+    pacer_init(PACER_RATE);
 }
 
 
@@ -89,7 +91,7 @@ void startup (void)
         ir_uart_putc(READY);
         tinygl_clear();
         tinygl_text ("WAITING FOR OPPONENT");
-        //wait_for (opponent_is_ready);
+        wait_for (opponent_is_ready);
         starting_player = true;
     }
 }
@@ -179,7 +181,7 @@ void play_round (void)
 
         // Only performs update for the player who has the ball on their screen
         if (ball_on_screen) {
-            if (ball_counter >= 80) {
+            if (ball_counter >= 40) {
                 ball_update_position (&my_ball);
                 ball_counter = 0;
             }
@@ -211,10 +213,7 @@ void play_round (void)
 int main (void)
 {
     game_init ();
-    pacer_init(PACER_RATE);
     startup ();
-    paddle_init (3, 40);
-
 
     // Begin Game
     while (!game_finished ()) {
