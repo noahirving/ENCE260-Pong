@@ -10,12 +10,13 @@ typedef struct {
 } Vector;
 
 typedef struct {
-    Vector *direction;
+    uint8_t direction_vector;
+    int8_t y_direction;
     Vector *position;
     uint8_t speed;
 } Ball;
 
-Ball new_ball(Vector *direction, Vector *position, uint8_t speed);
+Ball new_ball(uint8_t direction_vector, Vector *position, uint8_t speed);
 
 /** Checks if the ball has hit the paddle. Occurs when the ball is in the
  * column ahead of the paddle
@@ -30,17 +31,14 @@ void ball_bounce_paddle (Ball *self);
 
 void ball_bounce_wall (Ball * self);
 
-/** Initializes the ball to be at the centre of the board */
-void ball_init (void);
-
 /** Updates the balls position based on its direction */
 void ball_update_position (Ball *self);
 
 /** Transfers the ball to the opponent's screen */
-void transfer_ball (void);
+void transfer_ball (Ball *self);
 
 /** Receives the ball from the opponent's screen */
-void receive_ball (void);
+Ball receive_ball (char message);
 
 /** Sets the direction of the ball */
 void ball_set_vector (int vector);

@@ -164,7 +164,6 @@ void play_round (void)
 
     /* Only display ball for the player who is starting */
     if (starting_player) {
-        ball_init ();
         ball_on_screen = true;
     }
     ball_on_screen = true;
@@ -172,9 +171,8 @@ void play_round (void)
     paddle_init (3, 40);
 
     uint16_t ball_counter = 0;
-    Vector direction = {1, 1};
-    Vector position = {10, 10};
-    Ball my_ball = {&direction, &position, 10};
+    Vector position = {1, 1};
+    Ball my_ball = new_ball (1, &position, 5);
     // Begin Game
     while (round_running) {
         pacer_wait();
