@@ -1,5 +1,6 @@
 #include "system.h"
 #include "tinygl.h"
+#include "pacer.h"
 
 #define WIN_SCORE 3
 
