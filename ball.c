@@ -2,6 +2,7 @@
 #include "system.h"
 #include "ball.h"
 #include "pio.h"
+#include "ir_uart.h"
 
 
 #define SCALER 10
@@ -47,7 +48,7 @@ void receive_ball (void)
 
 }
 
-bool is_ball (uint8_t message)
+bool is_ball (char message)
 {
     return ~(message >> 7);
 }

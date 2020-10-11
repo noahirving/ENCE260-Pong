@@ -127,11 +127,11 @@ void countdown (void)
 /** Checks if the round is over, either from you losing or the opponent
  * saying that they have lost
  * @return 1 if the round is over, otherwise 0 */
-bool round_over (void)
+bool round_over (Ball* my_ball)
 {
     bool round_finished = false;
 
-    if (get_ball_column () == 5) {
+    if (get_ball_column (my_ball) == 5) {
         /* Column 5 is the column with the paddle.
         * If the ball is here it has gone past the paddle */
         round_finished = true;
@@ -142,7 +142,7 @@ bool round_over (void)
         increase_opponent_score ();
         ir_uart_putc (LOST);
 
-    } else if (ir_uart_read_ready_p && ir_uart_getc () == LOST) {
+    } else if (ir_uart_read_ready_p () && ir_uart_getc () == LOST) {
         /* Opponent has indicated that they have lost the round */
         round_finished = true;
         starting_player = false;
@@ -177,7 +177,7 @@ void play_round (void)
         pacer_wait();
         navswitch_update ();
 
-        if (round_over ()) {
+        if (round_over (&my_ball)) {
             continue;
         }
 
@@ -242,12 +242,12 @@ int main (void)
 
 
     // Begin Game
-    while (!game_finished) {
+    while (!game_finished ()) {
         play_round ();
         display_score ();
     }
 
-    if (opponent_won) {
+    if (opponent_won ()) {
         tinygl_text ("YOU LOST");
     } else {
         tinygl_text ("YOU WON");
