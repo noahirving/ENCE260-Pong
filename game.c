@@ -126,33 +126,31 @@ void countdown (void)
 }
 
 
-/** Checks if the round is over, either from you losing or the opponent
- * saying that they have lost
- * @param my_ball Ball object holding its position and direction
- * @return 1 if the round is over, otherwise 0 */
-bool round_over (Ball *my_ball)
+/** If you have lost the round, increases the opponent's score
+ * and notifies them that the round is over */
+void lost_round (void)
 {
-    bool round_finished = false;
+    /* Set the player that lost as the
+     * player to start the next round */
+    starting_player = true;
+    increase_opponent_score ();
+    ir_uart_putc (LOST);
+}
 
-    if (get_ball_column (my_ball) == 4) {
-        /* Column 5 is the column with the paddle.
-        * If the ball is here it has gone past the paddle */
-        round_finished = true;
 
-        /* Set the player that lost as the
-         * player to start the next round */
-        starting_player = true;
-        increase_opponent_score ();
-        ir_uart_putc (LOST);
+/** Checks if the opponent has lost the round. If so, increases your score.
+ * @return true if the opponent has lost so that the round will end, othwerwise false */
+bool check_opponent_lost (void) {
+    bool opponent_lost = false;
 
-    } else if (ir_uart_read_ready_p () && ir_uart_getc () == LOST) {
+    if (ir_uart_read_ready_p () && ir_uart_getc () == LOST) {
         /* Opponent has indicated that they have lost the round */
-        round_finished = true;
         starting_player = false;
         increase_your_score ();
+        opponent_lost = true;
     }
 
-    return round_finished;
+    return opponent_lost;
 }
 
 
@@ -193,6 +191,7 @@ void play_round (void)
                     else {
                         round_running = false;
                         ball_on_screen = false;
+                        lost_round ();
                     }
                 }
                 ball_bounce_wall (&my_ball);
@@ -213,6 +212,11 @@ void play_round (void)
         }
 
         /* Ball has reached edge of opponents screen and transfered it over */
+
+        if (check_opponent_lost ()) {
+            round_running = false;
+        }
+
         if (ir_uart_read_ready_p ()) {
             receive_ball ();
             ball_on_screen = true;
@@ -237,10 +241,11 @@ int main (void)
         display_score ();
     }
 
+    /* Leading spaces in text for formatting */
     if (opponent_won ()) {
-        tinygl_text ("YOU LOST");
+        tinygl_text ("  YOU LOST");
     } else {
-        tinygl_text ("YOU WON");
+        tinygl_text ("  YOU WON");
     }
 
     while (1) {
