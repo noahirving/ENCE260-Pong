@@ -30,10 +30,15 @@ Ball new_ball(uint8_t direction_vector, Vector *position, uint8_t speed)
     return ball;
 }
 
+static void invert_x_direction (Ball *self)
+{
+    self->direction_vector = -(self->direction_vector - NUM_DIRECTIONS / 2) + NUM_DIRECTIONS / 2;
+}
+
 /** Transfers the ball to the opponent's screen */
 void transfer_ball (Ball *self)
 {
-    uint8_t position_x = MIN_X / SCALER + MAX_X / SCALER - self->position / SCALER;
+    uint8_t position_x = MIN_X / SCALER + MAX_X / SCALER - self->position->x / SCALER;
 
     invert_x_direction (self);
     uint8_t direction_vector = self->direction_vector;
@@ -85,11 +90,6 @@ void ball_bounce_paddle (Ball *self)
     ball_update_position (self);
 }
 
-static void invert_x_direction (Ball *self)
-{
-    self->direction_vector = -(self->direction_vector - NUM_DIRECTIONS / 2) + NUM_DIRECTIONS / 2;
-}
-
 void ball_bounce_wall (Ball * self)
 {
     if (self->position->x <= MIN_X) {
@@ -110,10 +110,11 @@ void ball_update_position (Ball *self)
     self->position->y += direction.y * self->speed;
 
     // TODO: Remove for transfering
+    /*
     if (self->position->y <= MIN_Y) {
         self->position->y = MIN_Y;
         self->y_direction = -self->y_direction;
-    }
+    }*/
 }
 
 /** Gets the position of the ball as a bit pattern */

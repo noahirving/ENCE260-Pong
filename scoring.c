@@ -3,6 +3,7 @@
 #include "pacer.h"
 
 #define WIN_SCORE 3
+#define SCORE_DISPLAY_TIMER 3500
 
 static uint8_t your_score = 0;
 static uint8_t opponent_score = 0;
@@ -73,13 +74,24 @@ void display_score (void)
     tinygl_clear ();
     tinygl_text (score);
 
-    // 10 characters per second. Display 7 characters
-    // 7 seconds -> 3500 pacer ticks
     uint16_t pacer_count = 0;
 
-    while (pacer_count < 3500) {
+    while (pacer_count < SCORE_DISPLAY_TIMER) {
         pacer_wait ();
         tinygl_update ();
         pacer_count++;
+    }
+}
+
+
+/** Checks if a received message is score related by checking the largest bit (control bit)
+ * @param message The received message
+ * @return true if the control bit is 1, otherwise false */
+bool is_score (char message)
+{
+    if (message >> 7 == 1) {
+        return true;
+    } else {
+        return false;
     }
 }
