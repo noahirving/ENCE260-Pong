@@ -4,7 +4,7 @@
 #include "ir_uart.h"
 
 #define WIN_SCORE 3
-#define SCORE_DISPLAY_TIMER 3500
+#define SCORE_DISPLAY_TIMER 1750
 #define LOST (1 << 7)
 
 static uint8_t your_score = 0;
