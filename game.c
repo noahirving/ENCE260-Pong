@@ -35,12 +35,14 @@ void tinygl_setup (void)
 void game_init (void)
 {
     system_init ();
-    led_init ();  //led_set (LED1, 1); <- use to debug
-    led_set (LED1, 0);
+    //led_init ();  //led_set (LED1, 1); <- use to debug
+    //led_set (LED1, 0);
     tinygl_setup ();
 
     navswitch_init();
     ir_uart_init ();
+
+    pacer_init(PACER_RATE);
 }
 
 
@@ -174,7 +176,7 @@ void play_round (void)
     Vector position = {10, 10};
     Ball my_ball = {&direction, &position, 10};
     // Begin Game
-    while (!round_running) {
+    while (round_running) {
         pacer_wait();
         navswitch_update ();
 
@@ -227,10 +229,7 @@ void play_round (void)
 int main (void)
 {
     game_init ();
-    pacer_init(PACER_RATE);
     startup ();
-    paddle_init (3, 40);
-
 
     // Begin Game
     while (!game_finished ()) {
