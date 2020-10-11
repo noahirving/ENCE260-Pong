@@ -40,7 +40,7 @@ void ball_update_position (Ball *self);
 void transfer_ball (void);
 
 /** Receives the ball from the opponent's screen */
-void receive_ball (void);
+void receive_ball (char message);
 
 /** Sets the direction of the ball */
 void ball_set_vector (int vector);

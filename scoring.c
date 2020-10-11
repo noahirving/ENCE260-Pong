@@ -82,3 +82,16 @@ void display_score (void)
         pacer_count++;
     }
 }
+
+
+/** Checks if a received message is score related by checking the largest bit (control bit)
+ * @param message The received message
+ * @return true if the control bit is 1, otherwise false */
+bool is_score (char message)
+{
+    if (message >> 7 == 1) {
+        return true;
+    } else {
+        return false;
+    }
+}

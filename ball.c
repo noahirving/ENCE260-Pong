@@ -43,7 +43,7 @@ void transfer_ball (void)
 }
 
 /** Receives the ball from the opponent's screen */
-void receive_ball (void)
+void receive_ball (char message)
 {
 
 }

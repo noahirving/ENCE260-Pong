@@ -138,19 +138,11 @@ void lost_round (void)
 }
 
 
-/** Checks if the opponent has lost the round. If so, increases your score.
- * @return true if the opponent has lost so that the round will end, othwerwise false */
-bool check_opponent_lost (void) {
-    bool opponent_lost = false;
-
-    if (ir_uart_read_ready_p () && ir_uart_getc () == LOST) {
-        /* Opponent has indicated that they have lost the round */
-        starting_player = false;
-        increase_your_score ();
-        opponent_lost = true;
-    }
-
-    return opponent_lost;
+/** If opponent lost the round, increase your score */
+void opponent_lost_round (void) {
+    /* Opponent has indicated that they have lost the round */
+    starting_player = false;
+    increase_your_score ();
 }
 
 
@@ -211,15 +203,20 @@ void play_round (void)
             }*/
         }
 
-        /* Ball has reached edge of opponents screen and transfered it over */
-
-        if (check_opponent_lost ()) {
-            round_running = false;
-        }
-
         if (ir_uart_read_ready_p ()) {
-            receive_ball ();
-            ball_on_screen = true;
+
+            char message = ir_uart_getc ();
+
+            if (is_score(message)) {
+                /* Opponent lost the round */
+                opponent_lost_round ();
+                round_running = false;
+
+            } else {
+                /* Ball has reached edge of opponents screen and transfered it over */
+                receive_ball (message);
+                ball_on_screen = true;
+            }
         }
 
         pacer_wait ();
