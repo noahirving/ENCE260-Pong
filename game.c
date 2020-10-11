@@ -129,12 +129,12 @@ void countdown (void)
  * @return 1 if the round is over, otherwise 0 */
 bool round_over (void)
 {
-    round_finished = false;
+    bool round_finished = false;
 
     if (get_ball_column () == 5) {
         /* Column 5 is the column with the paddle.
         * If the ball is here it has gone past the paddle */
-        round_finished == true;
+        round_finished = true;
 
         /* Set the player that lost as the
          * player to start the next round */
@@ -142,7 +142,7 @@ bool round_over (void)
         increase_opponent_score ();
         ir_uart_putc (LOST);
 
-    } else if (ir_uart_read_ready_p && ir_uart_getc == LOST) {
+    } else if (ir_uart_read_ready_p && ir_uart_getc () == LOST) {
         /* Opponent has indicated that they have lost the round */
         round_finished = true;
         starting_player = false;
@@ -150,12 +150,14 @@ bool round_over (void)
     }
 
     return round_finished;
+}
 
 
 /** Starts a single round. Plays until one of the players miss the ball */
 void play_round (void)
 {
     bool round_finished = false;
+    bool ball_on_screen = false;
 
     /* Only display ball for the player who is starting */
     if (starting_player) {
@@ -177,7 +179,7 @@ void play_round (void)
         if (ball_on_screen) {
             ball_update_position ();
 
-            if (get_ball_column () == 0 // TODO: Check if ball is travelling to opponent) {
+            if (get_ball_column () == 0) // TODO: Check if ball is travelling to opponent) {
                 transfer_ball ();
                 ball_on_screen = false;
 
@@ -185,6 +187,7 @@ void play_round (void)
 
         } else {
             ledmat_display_column (0, 0); // Removes ball from display as ball is on opponent screen
+        }
 
         /* Ball has reached edge of opponents screen and transfered it over */
         if (ir_uart_read_ready_p ()) {
@@ -203,11 +206,12 @@ void play_round (void)
 void display_score (void)
 {
     /* Format of the score display. '#' indicates the number score of each player */
-    char score[] = {' ', ' ', '#', '-', '#', ' ', ' '}
+    char score[] = {' ', ' ', '#', '-', '#', ' ', ' '};
     score[2] = get_your_score() + '0';
     score[4] = get_opponent_score() + '0';
 
     tinygl_text_mode_set (TINYGL_TEXT_MODE_SCROLL);
+    tinygl_text (score);
 
     // 10 characters per second. Display 7 characters
     // 7 seconds -> 3500 pacer ticks
@@ -222,8 +226,6 @@ void display_score (void)
 
 int main (void)
 {
-    bool ball_on_screen = false;
-
     game_init ();
     pacer_init(PACER_RATE);
     startup ();
@@ -231,8 +233,7 @@ int main (void)
 
 
     // Begin Game
-    while (!game_finished)
-    {
+    while (!game_finished) {
         play_round ();
         display_score ();
     }

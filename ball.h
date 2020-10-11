@@ -15,6 +15,12 @@ void ball_init (void);
 /** Updates the balls position based on its direction */
 void ball_update_position (void);
 
+/** Transfers the ball to the opponent's screen */
+void transfer_ball (void);
+
+/** Receives the ball from the opponent's screen */
+void receive_ball (void);
+
 /** Sets the direction of the ball */
 void ball_set_vector (int vector);
 

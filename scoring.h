@@ -1,5 +1,5 @@
 #ifndef SCORING_H
-#defing SCORING_H
+#define SCORING_H
 
 #include "system.h"
 

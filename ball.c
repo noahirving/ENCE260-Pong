@@ -9,7 +9,7 @@ static uint8_t ball_row;
  * @return 1 if the ball hits the paddle otherwise 0 */
 bool check_ball_hit (void)
 {
-    uint8_t paddle = get_paddle;
+    uint8_t paddle = get_paddle ();
     return (ball_row & (paddle & (1 << ball_row)));
 }
 
@@ -23,7 +23,7 @@ void ball_init (void)
 /** Transfers the ball to the opponent's screen */
 void transfer_ball (void)
 {
-    ir_uart_putc (0); // Transfer ball position and vecotr as single character
+    ir_uart_putc (0); // Transfer ball position and vector as single character
 }
 
 /** Receives the ball from the opponent's screen */
@@ -31,7 +31,7 @@ void receive_ball (void)
 {
     char received_ball = ir_uart_getc ();
     ball_col = 0;
-    ball_row = 0 // row ball was received on
+    ball_row = 0; // row ball was received on
 }
 
 /** Updates the balls position based on its direction */
