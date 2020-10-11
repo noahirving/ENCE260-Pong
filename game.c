@@ -164,9 +164,15 @@ void play_round (void)
         ball_init ();
         ball_on_screen = true;
     }
-
+    ball_on_screen = true;
     countdown ();
+    paddle_init (3, 40);
 
+    uint16_t ball_counter = 0;
+    Vector direction = {1, 1};
+    Vector position = {10, 10};
+    Ball my_ball = {&direction, &position, 10};
+    // Begin Game
     while (!round_finished) {
         pacer_wait();
         navswitch_update ();
@@ -177,16 +183,18 @@ void play_round (void)
 
         // Only performs update for the player who has the ball on their screen
         if (ball_on_screen) {
-            ball_update_position ();
+            if (ball_counter >= 40) {
+                ball_update_position (&my_ball);
+                ball_counter = 0;
+            }
 
-            if (get_ball_column () == 0) // TODO: Check if ball is travelling to opponent) {
+            if (get_ball_column (&my_ball) == 0) { // TODO: Check if ball is travelling to opponent) {
                 transfer_ball ();
                 ball_on_screen = false;
 
-            ledmat_display_column (get_ball(), get_ball_column()); // display ball
-
-        } else {
-            ledmat_display_column (0, 0); // Removes ball from display as ball is on opponent screen
+            } else {
+                ledmat_display_column (get_ball(&my_ball), get_ball_column(&my_ball)); // display ball
+            }
         }
 
         /* Ball has reached edge of opponents screen and transfered it over */
@@ -198,6 +206,7 @@ void play_round (void)
         pacer_wait ();
         paddle_update ();
         ledmat_display_column (get_paddle(), 4); // display paddle
+        ball_counter ++;
     }
 }
 
