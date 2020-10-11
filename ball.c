@@ -44,10 +44,25 @@ void transfer_ball (void)
 /** Receives the ball from the opponent's screen */
 void receive_ball (void)
 {
-    char received_ball = ir_uart_getc ();
-    ball_col = 0;
-    ball_row = 0 // row ball was received on
+
 }
+
+bool is_ball (uint8_t message)
+{
+    return ~(message >> 7);
+}
+
+bool can_collide (Ball *self)
+{
+    return get_ball_column (self) == MAX_Y;
+}
+
+bool is_colliding (Ball *self,  uint8_t paddle_bitmap)
+{
+    return get_ball (self) & paddle_bitmap;
+}
+
+
 
 /** Updates the balls position based on its direction */
 void ball_update_position (Ball *self)
