@@ -30,4 +30,8 @@ bool game_finished (void);
  * @return 1 if your opponent won, othwerwise 0 */
 bool opponent_won (void);
 
+
+/** Displays the score after the round has ended */
+void display_score (void);
+
 #endif

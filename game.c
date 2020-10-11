@@ -126,8 +126,9 @@ void countdown (void)
 
 /** Checks if the round is over, either from you losing or the opponent
  * saying that they have lost
+ * @param my_ball Ball object holding its position and direction
  * @return 1 if the round is over, otherwise 0 */
-bool round_over (Ball* my_ball)
+bool round_over (Ball *my_ball)
 {
     bool round_finished = false;
 
@@ -207,28 +208,6 @@ void play_round (void)
         paddle_update ();
         ledmat_display_column (get_paddle(), 4); // display paddle
         ball_counter ++;
-    }
-}
-
-
-/** Displays the score after the round has ended */
-void display_score (void)
-{
-    /* Format of the score display. '#' indicates the number score of each player */
-    char score[] = {' ', ' ', '#', '-', '#', ' ', ' '};
-    score[2] = get_your_score() + '0';
-    score[4] = get_opponent_score() + '0';
-
-    tinygl_text_mode_set (TINYGL_TEXT_MODE_SCROLL);
-    tinygl_text (score);
-
-    // 10 characters per second. Display 7 characters
-    // 7 seconds -> 3500 pacer ticks
-    uint16_t pacer_count = 0;
-
-    while (pacer_count < 3500) {
-        tinygl_update ();
-        pacer_count++;
     }
 }
 

@@ -1,4 +1,5 @@
 #include "system.h"
+#include "tinygl.h"
 
 #define WIN_SCORE 3
 
@@ -58,3 +59,24 @@ bool opponent_won (void)
     }
 }
 
+
+/** Displays the score after the round has ended */
+void display_score (void)
+{
+    /* Format of the score display. '#' indicates the number score of each player */
+    char score[] = {' ', ' ', '#', '-', '#', ' ', ' '};
+    score[2] = get_your_score() + '0';
+    score[4] = get_opponent_score() + '0';
+
+    tinygl_text_mode_set (TINYGL_TEXT_MODE_SCROLL);
+    tinygl_text (score);
+
+    // 10 characters per second. Display 7 characters
+    // 7 seconds -> 3500 pacer ticks
+    uint16_t pacer_count = 0;
+
+    while (pacer_count < 3500) {
+        tinygl_update ();
+        pacer_count++;
+    }
+}
