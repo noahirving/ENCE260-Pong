@@ -4,11 +4,11 @@
 #include "system.h"
 
 /** Increments your score by 1 */
-void increase_your_score (void);
+void lost_round (void);
 
 
 /** Increments opponent's score by 1 */
-void increase_opponent_score (void);
+void opponent_lost_round (void);
 
 
 /** Gets your score

@@ -1,26 +1,30 @@
 #include "system.h"
 #include "tinygl.h"
 #include "pacer.h"
+#include "ir_uart.h"
 
 #define WIN_SCORE 3
 #define SCORE_DISPLAY_TIMER 3500
+#define LOST (1 << 7)
 
 static uint8_t your_score = 0;
 static uint8_t opponent_score = 0;
 
 
-/** Increments your score by 1 */
-void increase_your_score (void)
+/** If you have lost the round, increases the opponent's score
+ * and notifies them that the round is over */
+void lost_round (void)
+{
+    opponent_score++;
+    ir_uart_putc (LOST);
+}
+
+
+/** If opponent lost the round, increase your score */
+void opponent_lost_round (void)
 {
     your_score++;
 }
-
-/** Increments opponent's score by 1 */
-void increase_opponent_score (void)
-{
-    opponent_score++;
-}
-
 
 /** Gets your score
  * @return your score */

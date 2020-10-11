@@ -15,7 +15,6 @@
 #define MESSAGE_RATE 10
 #define PADDLE_PERIOD 40
 #define READY 'R'
-#define LOST (1 << 7)
 
 
 bool starting_player = false;
@@ -126,26 +125,6 @@ void countdown (void)
 }
 
 
-/** If you have lost the round, increases the opponent's score
- * and notifies them that the round is over */
-void lost_round (void)
-{
-    /* Set the player that lost as the
-     * player to start the next round */
-    starting_player = true;
-    increase_opponent_score ();
-    ir_uart_putc (LOST);
-}
-
-
-/** If opponent lost the round, increase your score */
-void opponent_lost_round (void) {
-    /* Opponent has indicated that they have lost the round */
-    starting_player = false;
-    increase_your_score ();
-}
-
-
 /** Starts a single round. Plays until one of the players miss the ball */
 void play_round (void)
 {
@@ -181,6 +160,7 @@ void play_round (void)
                     else {
                         round_running = false;
                         ball_on_screen = false;
+                        starting_player = true;
                         lost_round ();
                     }
                 }
@@ -204,6 +184,7 @@ void play_round (void)
 
             if (is_score(message)) {
                 /* Opponent lost the round */
+                starting_player = false;
                 opponent_lost_round ();
                 round_running = false;
 
