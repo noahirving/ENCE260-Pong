@@ -15,7 +15,7 @@
 #define MESSAGE_RATE 10
 #define PADDLE_PERIOD 40
 #define READY 'R'
-#define LOST 'L'
+#define LOST (1 << 7)
 
 
 bool starting_player = false;
@@ -209,7 +209,7 @@ void play_round (void)
 
             } else {
                 /* Ball has reached edge of opponents screen and transfered it over */
-                my_ball = receive_ball (message);
+                receive_ball (&my_ball, message);
                 ball_on_screen = true;
             }
         }

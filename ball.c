@@ -53,13 +53,16 @@ void transfer_ball (Ball *self)
 }
 
 /** Receives the ball from the opponent's screen */
-Ball receive_ball (char message)
+void receive_ball (Ball *ball, char message)
 {
     uint8_t position_x = message & 0b111;
-    Vector position = {position_x, MIN_Y};
     uint8_t direction_vector = (message >> 3) & 0b111;
-    // TODO:speed
-    return  new_ball (direction_vector, &position, 10);
+
+    ball->position->x = position_x * SCALER;
+    ball->position->y = MIN_Y * SCALER;
+    ball->y_direction = 1;
+    ball->direction_vector = direction_vector;
+    ball->speed = 10;
 }
 
 bool is_ball (char message)

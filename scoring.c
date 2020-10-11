@@ -89,9 +89,5 @@ void display_score (void)
  * @return true if the control bit is 1, otherwise false */
 bool is_score (char message)
 {
-    if (message >> 7 == 1) {
-        return true;
-    } else {
-        return false;
-    }
+    return (message >> 7) & 1;
 }

@@ -39,7 +39,7 @@ bool ball_is_transferable (Ball *self);
 void transfer_ball (Ball *self);
 
 /** Receives the ball from the opponent's screen */
-Ball receive_ball (char message);
+void receive_ball (Ball *ball, char message);
 
 /** Sets the direction of the ball */
 void ball_set_vector (int vector);
