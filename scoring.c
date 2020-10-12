@@ -94,9 +94,9 @@ void end_game (void)
 {
     /* Leading spaces in text for formatting */
     if (opponent_won ()) {
-        tinygl_text ("  YOU LOST");
+        tinygl_text ("  WINNER");
     } else {
-        tinygl_text ("  YOU WON");
+        tinygl_text ("  LOSER");
     }
 
     while (1) {

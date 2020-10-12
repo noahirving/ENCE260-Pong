@@ -78,7 +78,7 @@ void wait_for (uint8_t (*func)(void))
 void startup (void)
 {
     tinygl_text_mode_set (TINYGL_TEXT_MODE_SCROLL);
-    tinygl_text ("READY UP");
+    tinygl_text ("  READY UP");
 
     wait_for (is_ready);
 
@@ -92,7 +92,7 @@ void startup (void)
         // Whis player will also start the first round
         ir_uart_putc(READY);
         tinygl_clear();
-        tinygl_text ("WAITING FOR OPPONENT");
+        tinygl_text ("  WAITING FOR OPPONENT");
         wait_for (opponent_is_ready);
         starting_player = true;
     }
