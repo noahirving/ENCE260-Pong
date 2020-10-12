@@ -6,6 +6,7 @@
 #include "pio.h"
 #include "navswitch.h"
 #include "paddle.h"
+#include "ledmat.h"
 
 #define MIN_POSITION 0
 #define BOARD_WIDTH LEDMAT_ROWS_NUM
@@ -110,6 +111,13 @@ void paddle_set_length (uint8_t new_length)
 void paddle_set_period (uint16_t period)
 {
     move_period = period;
+}
+
+
+/** Updates the ledmat to display the paddle's current postition */
+void paddle_update_display (void)
+{
+    ledmat_display_column (get_paddle(), 4);
 }
 
 

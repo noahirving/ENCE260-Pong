@@ -119,7 +119,8 @@ void countdown (void)
         if (counter[0] == '0') {
             tinygl_text ("GO");
         } else {
-            tinygl_text (counter);
+            tinygl_point_t pos = {0, 4};
+            tinygl_draw_message (counter, pos, 1);
         }
     }
 }
@@ -141,11 +142,15 @@ void play_round (void)
 
     uint16_t ball_counter = 0;
     Vector position = {1, 1};
-    Ball my_ball = new_ball (1, &position, 5);
+    Ball my_ball = new_ball (1, &position, 10);
     // Begin Game
     while (round_running) {
-        pacer_wait();
+        pacer_wait ();
         navswitch_update ();
+        paddle_update ();
+        paddle_update_display(); // display paddle
+
+        pacer_wait();
 
         // Only performs update for the player who has the ball on their screen
         if (ball_on_screen) {
@@ -158,9 +163,11 @@ void play_round (void)
                         ball_bounce_paddle (&my_ball);
                     }
                     else {
+                        flash_ball (&my_ball);
                         round_running = false;
                         ball_on_screen = false;
                         starting_player = true;
+
                         lost_round ();
                     }
                 }
@@ -174,7 +181,7 @@ void play_round (void)
 
             }
             if (ball_on_screen) {
-                ledmat_display_column (get_ball(&my_ball), get_ball_column(&my_ball));
+                ball_update_display (&my_ball);
             }
         }
 
@@ -195,9 +202,6 @@ void play_round (void)
             }
         }
 
-        pacer_wait ();
-        paddle_update ();
-        ledmat_display_column (get_paddle(), 4); // display paddle
         ball_counter ++;
     }
 }

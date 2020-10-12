@@ -3,6 +3,8 @@
 #include "ball.h"
 #include "pio.h"
 #include "ir_uart.h"
+#include "ledmat.h"
+#include "pacer.h"
 
 
 #define SCALER 10
@@ -12,6 +14,8 @@
 #define MAX_Y (4 * SCALER)
 #define NUM_DIRECTIONS 7
 #define DEFAULT_Y_DIRECTION 1
+#define NUM_FLASHES 4
+#define FLASH_PERIOD 60
 
 /** Direction vectors for ball. */
 static const Vector directions[] = {
@@ -187,4 +191,45 @@ uint8_t get_ball (Ball *self)
 uint8_t get_ball_column (Ball *self)
 {
     return self->position->y / SCALER;
+}
+
+
+/** Checks if the ball has hit the paddle. Occurs when the ball is in the
+ * column ahead of the paddle
+ * @return 1 if the ball hits the paddle otherwise 0. */
+uint8_t check_ball_hit (Ball *self)
+{
+    return (get_ball_column (self) == MAX_Y) && (get_ball(self) & get_paddle ());
+}
+
+
+/** Updates the ledmat to display the ball's current postition
+ * @param Address to the ball object */
+void ball_update_display (Ball* self)
+{
+    ledmat_display_column (get_ball(self), get_ball_column(self));
+}
+
+
+/** Flashes the ball on and off at its current position
+ * @param Address of the ball object */
+void flash_ball (Ball *self)
+{
+    uint16_t pacer_counter = 0;
+    uint8_t flash_count = 0;
+    while (flash_count < NUM_FLASHES) {
+        pacer_wait ();
+        paddle_update_display ();
+        pacer_wait ();
+
+        if (pacer_counter < FLASH_PERIOD / 2) {
+            ball_update_display (self);
+        }
+
+        if (pacer_counter == FLASH_PERIOD) {
+            flash_count++;
+            pacer_counter = 0;
+        }
+        pacer_counter++;
+    }
 }
