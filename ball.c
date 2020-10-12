@@ -20,11 +20,11 @@
 /** Direction vectors for ball. */
 static const Vector directions[] = {
     {-2, 1},
-    {-1, 1},
+    {-2, 2},
     {-1, 2},
-    {0, 1},
+    {0, 2},
     {1, 2},
-    {1, 1},
+    {2, 2},
     {2, 1}
 };
 
@@ -97,7 +97,7 @@ void receive_ball (Ball *ball, char message)
     ball->position->y = MIN_Y * SCALER;
     ball->y_direction = DEFAULT_Y_DIRECTION;
     ball->direction_vector = direction_vector;
-    ball->speed = 10; // TODO
+    ball->speed = 5; // TODO
 }
 
 /** Returns if the message is an encoded ball.
