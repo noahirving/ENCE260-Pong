@@ -23,6 +23,7 @@ scoring.o: scoring.c ../../drivers/avr/system.h ../../drivers/avr/ir_uart.h ../.
 	$(CC) -c $(CFLAGS) $< -o $@
 
 paddle.o: paddle.c ../../drivers/avr/system.h ../../drivers/avr/pio.h ../../drivers/navswitch.h ../../drivers/ledmat.h
+
 	$(CC) -c $(CFLAGS) $< -o $@
 
 ball.o: ball.c paddle.h ../../drivers/avr/system.h ../../drivers/ledmat.h ../../utils/pacer.h

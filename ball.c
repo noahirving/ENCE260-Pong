@@ -14,6 +14,8 @@
 #define MAX_Y (4 * SCALER)
 #define NUM_DIRECTIONS 7
 #define DEFAULT_Y_DIRECTION 1
+#define NUM_FLASHES 4
+#define FLASH_PERIOD 60
 
 /** Direction vectors for ball. */
 static const Vector directions[] = {
@@ -214,23 +216,20 @@ void ball_update_display (Ball* self)
 void flash_ball (Ball *self)
 {
     uint16_t pacer_counter = 0;
-    uint8_t num_flashes = 0;
-    while (num_flashes < 4) {
+    uint8_t flash_count = 0;
+    while (flash_count < NUM_FLASHES) {
         pacer_wait ();
         paddle_update_display ();
         pacer_wait ();
 
-        if (pacer_counter == 67) {
+        if (pacer_counter < FLASH_PERIOD / 2) {
             ball_update_display (self);
-            pacer_counter++;
         }
 
-        if (pacer_counter == 125) {
-            ledmat_display_column (0, get_ball_column(self));
-            num_flashes++;
+        if (pacer_counter == FLASH_PERIOD) {
+            flash_count++;
             pacer_counter = 0;
         }
-
         pacer_counter++;
     }
 }
