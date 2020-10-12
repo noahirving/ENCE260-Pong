@@ -3,6 +3,8 @@
 #include "ball.h"
 #include "pio.h"
 #include "ir_uart.h"
+#include "ledmat.h"
+#include "pacer.h"
 
 
 #define SCALER 10
@@ -143,4 +145,39 @@ uint8_t get_ball_column (Ball *self)
 uint8_t check_ball_hit (Ball *self)
 {
     return (get_ball_column (self) == MAX_Y) && (get_ball(self) & get_paddle ());
+}
+
+
+/** Updates the ledmat to display the ball's current postition
+ * @param Address to the ball object */
+void ball_update_display (Ball* self)
+{
+    ledmat_display_column (get_ball(self), get_ball_column(self));
+}
+
+
+/** Flashes the ball on and off at its current position
+ * @param Address of the ball object */
+void flash_ball (Ball *self)
+{
+    uint16_t pacer_counter = 0;
+    uint8_t num_flashes = 0;
+    while (num_flashes < 4) {
+        pacer_wait ();
+        paddle_update_display ();
+        pacer_wait ();
+
+        if (pacer_counter == 67) {
+            ball_update_display (self);
+            pacer_counter++;
+        }
+
+        if (pacer_counter == 125) {
+            ledmat_display_column (0, get_ball_column(self));
+            num_flashes++;
+            pacer_counter = 0;
+        }
+
+        pacer_counter++;
+    }
 }

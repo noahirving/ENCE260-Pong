@@ -27,4 +27,8 @@ void paddle_update (void);
 /** Gets the paddle as a single row bitmap. */
 uint8_t get_paddle (void);
 
+
+/** Updates the ledmat to display the paddle's current postition */
+void paddle_update_display (void);
+
 #endif

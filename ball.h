@@ -50,4 +50,14 @@ uint8_t get_ball (Ball *self);
 /** Gets the column of the ball */
 uint8_t get_ball_column (Ball *self);
 
+
+/** Updates the ledmat to display the ball's current postition
+ * @param Address to the ball object */
+void ball_update_display (Ball* self);
+
+
+/** Flashes the ball on and off at its current position
+ * @param Address of the ball object */
+void flash_ball (Ball *self);
+
 #endif
