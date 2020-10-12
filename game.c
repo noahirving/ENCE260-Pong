@@ -75,7 +75,7 @@ void wait_for (uint8_t (*func)(void))
 void startup (void)
 {
     tinygl_text_mode_set (TINYGL_TEXT_MODE_SCROLL);
-    tinygl_text ("READY UP");
+    tinygl_text ("  READY UP");
 
     wait_for (is_ready);
 
@@ -89,7 +89,7 @@ void startup (void)
         // First person to ready up will also start the first round
         ir_uart_putc(READY);
         tinygl_clear();
-        tinygl_text ("WAITING FOR OPPONENT");
+        tinygl_text ("  WAITING FOR OPPONENT");
         wait_for (opponent_is_ready);
         starting_player = true;
     }
@@ -140,7 +140,7 @@ void play_round (void)
     countdown ();
     paddle_init (3, 40);
 
-    uint16_t ball_counter = 0;
+    uint16_t ball_tick_counter = 0;
     Vector position = {1, 1};
     Ball my_ball = new_ball (1, &position, 10);
     // Begin Game
@@ -154,8 +154,8 @@ void play_round (void)
 
         // Only performs update for the player who has the ball on their screen
         if (ball_on_screen) {
-            if (ball_counter >= 40) {
-                ball_counter = 0;
+            if (ball_tick_counter >= 40) {
+                ball_tick_counter = 0;
 
                 ball_update_position (&my_ball);
                 if (can_collide (&my_ball)) {
@@ -202,7 +202,7 @@ void play_round (void)
             }
         }
 
-        ball_counter ++;
+        ball_tick_counter++;
     }
 }
 
