@@ -152,7 +152,7 @@ void ball_bounce_paddle (Ball *self)
     self->y_direction = -self->y_direction;
 
     // Updates the ball position
-    ball_update_position (self); // TODO: Needed?
+    ball_update_position (self);
 }
 
 /** Bounces ball off wall if on wall.
