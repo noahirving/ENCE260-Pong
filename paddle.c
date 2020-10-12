@@ -12,6 +12,7 @@
 #define BOARD_WIDTH LEDMAT_ROWS_NUM
 #define LEFT NAVSWITCH_SOUTH
 #define RIGHT NAVSWITCH_NORTH
+#define DEFAULT_PADDLE_PERIOD 40
 
 
 static uint8_t paddle_length = 3;
@@ -42,12 +43,11 @@ static void paddle_shift_right (void)
 
 
 /** Initializes the paddle.
- * @param new_length length of the paddle
- * @param new_period paddle update period */
-void paddle_init (uint8_t new_length, uint16_t new_period)
+ * @param new_length length of the paddle */
+void paddle_init (uint8_t new_length)
 {
     paddle_set_length (new_length);
-    paddle_set_period (new_period);
+    paddle_set_period (DEFAULT_PADDLE_PERIOD);
 
     /* Sets the paddle position to the center. */
     paddle_position = (BOARD_WIDTH / 2) - (paddle_length / 2) + MIN_POSITION;

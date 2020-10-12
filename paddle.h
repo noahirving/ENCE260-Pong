@@ -17,7 +17,7 @@ void paddle_set_period (uint16_t period);
 /** Initializes the paddle.
  * @param new_length length of the paddle
  * @param new_period paddle update period */
-void paddle_init (uint8_t new_length, uint16_t new_period);
+void paddle_init (uint8_t new_length);
 
 
 /** Updates the paddles position when the navswitch is pushed. */
