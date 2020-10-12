@@ -13,7 +13,11 @@
 #define PACER_RATE 500
 #define COUNTDOWN_TIMER_RATE 500
 #define MESSAGE_RATE 20
-#define PADDLE_PERIOD 40
+#define PADDLE_LENGTH 3
+#define DEFAULT_BALL_SPEED 5
+#define DEFAULT_BALL_DIRECTION 3
+#define DEFAULT_BALL_POSITION {3, 0}
+#define BALL_UPDATE_PERIOD 40
 #define READY 'R'
 
 
@@ -30,22 +34,19 @@ void tinygl_setup (void)
 }
 
 
-/** Initialize system and drivers*/
+/** Initialize system and drivers */
 void game_init (void)
 {
     system_init ();
-    //led_init ();  //led_set (LED1, 1); <- use to debug
-    //led_set (LED1, 0);
     tinygl_setup ();
-
     navswitch_init();
     ir_uart_init ();
-
     pacer_init(PACER_RATE);
 }
 
 
-/** Checks if player is ready to start*/
+/** Checks if player is ready to start, indicated by a push of the navswitch
+ * @return 1 if the navswitch has been pushed, otherwise 0 */
 uint8_t is_ready (void)
 {
     navswitch_update ();
@@ -53,14 +54,16 @@ uint8_t is_ready (void)
 }
 
 
-/** Checks if opponent is ready to start*/
+/** Checks if opponent is ready to start indicated by the reception
+ * of a 'Ready' indicator
+ * @return 1 if the opponent has indicated ready, otherwise 0 */
 uint8_t opponent_is_ready (void)
 {
     return ir_uart_read_ready_p () && ir_uart_getc () == READY;
 }
 
 
-/** Passes the is_ready functions and waits until they are true
+/** Waits until the passed function returns true
  * @param *func function passed in to be evaluated for true or false */
 void wait_for (uint8_t (*func)(void))
 {
@@ -86,7 +89,7 @@ void startup (void)
 
     } else {
         // First person to ready up, send ready to opponent and wait for response
-        // First person to ready up will also start the first round
+        // Whis player will also start the first round
         ir_uart_putc(READY);
         tinygl_clear();
         tinygl_text ("  WAITING FOR OPPONENT");
@@ -119,7 +122,7 @@ void countdown (void)
         if (counter[0] == '0') {
             tinygl_text ("GO");
         } else {
-            tinygl_point_t pos = {0, 4};
+            tinygl_point_t pos = {0, 4}; // Position of character is set to the middle of the rotated ledmat
             tinygl_draw_message (counter, pos, 1);
         }
     }
@@ -136,13 +139,14 @@ void play_round (void)
     if (starting_player) {
         ball_on_screen = true;
     }
-    //ball_on_screen = true;
+
     countdown ();
-    paddle_init (3, 40);
+    paddle_init (PADDLE_LENGTH);
 
     uint16_t ball_tick_counter = 0;
-    Vector position = {1, 1};
-    Ball my_ball = new_ball (1, &position, 10);
+    Vector position = DEFAULT_BALL_POSITION;
+    Ball my_ball = new_ball (DEFAULT_BALL_DIRECTION, &position, DEFAULT_BALL_SPEED);
+
     // Begin Game
     while (round_running) {
         pacer_wait ();
@@ -154,7 +158,7 @@ void play_round (void)
 
         // Only performs update for the player who has the ball on their screen
         if (ball_on_screen) {
-            if (ball_tick_counter >= 40) {
+            if (ball_tick_counter >= BALL_UPDATE_PERIOD) {
                 ball_tick_counter = 0;
 
                 ball_update_position (&my_ball);
