@@ -5,6 +5,7 @@
 #include "ir_uart.h"
 #include "ledmat.h"
 #include "pacer.h"
+#include "timer.h"
 
 
 #define SCALER 10
@@ -151,7 +152,17 @@ void ball_bounce_paddle (Ball *self)
     // Reverses y_direction.
     self->y_direction = -self->y_direction;
 
-    // Updates the ball position
+
+    int8_t num = (timer_get () % 3) - 1;
+    if (self->direction_vector == 0 && num == -1) {
+        self->direction_vector = 0;
+    } else if (self->direction_vector == NUM_DIRECTIONS - 1 && num == 1) {
+        self->direction_vector = NUM_DIRECTIONS - 1;
+    } else {
+        self->direction_vector += num;
+    }
+
+    // Updates the ball position such that it has bounced off the paddle.
     ball_update_position (self);
 }
 
