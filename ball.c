@@ -147,8 +147,8 @@ void ball_bounce_paddle (Ball *self)
     // Reverses y_direction.
     self->y_direction = -self->y_direction;
 
-    // Updates the ball position
-    ball_update_position (self); // TODO: Needed?
+    // Updates the ball position such that it has bounced off the paddle.
+    ball_update_position (self);
 }
 
 /** Bounces ball off wall if on wall.
