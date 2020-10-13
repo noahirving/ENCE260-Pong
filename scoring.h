@@ -3,6 +3,11 @@
 
 #include "system.h"
 
+
+/** Initiates the score for both players to 0 */
+void scoring_init (void);
+
+
 /** Increments opponent's score by 1 and notifies them that
  * the round is over */
 void lost_round (void);

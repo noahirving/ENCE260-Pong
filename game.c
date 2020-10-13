@@ -41,6 +41,7 @@ void tinygl_setup (void)
 void game_init (void)
 {
     system_init ();
+    scoring_init();
     tinygl_setup ();
     navswitch_init ();
     ir_uart_init ();
@@ -59,6 +60,7 @@ void wait_for (bool (*func)(void))
 
 void connect (void)
 {
+    starting_player = false;
     tinygl_text_mode_set (TINYGL_TEXT_MODE_SCROLL);
     tinygl_text ("  READY UP");
 
@@ -200,14 +202,16 @@ void play_round (void)
 
 int main (void)
 {
-    game_init ();
-    connect ();
+    while (1) {
+        game_init ();
+        connect ();
 
-    // Begin Game
-    while (!game_finished ()) {
-        play_round ();
-        display_score ();
+        // Begin Game
+        while (!game_finished ()) {
+            play_round ();
+            display_score ();
+        }
+
+        end_game ();
     }
-
-    end_game ();
 }
