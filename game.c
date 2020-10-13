@@ -20,16 +20,12 @@
 #define PACER_RATE 500
 #define COUNTDOWN_TIMER_RATE 500
 #define MESSAGE_RATE 20
-<<<<<<< HEAD
 #define PADDLE_LENGTH 3
 #define DEFAULT_BALL_SPEED BALL_MIN_SPEED
 #define DEFAULT_BALL_DIRECTION 3
 #define DEFAULT_BALL_POSITION {3, 0}
 #define BALL_SPEED_INC_PERIOD 3
 #define BALL_UPDATE_PERIOD 40
-=======
-#define READY 'R'
->>>>>>> 1e57c2fec028fb1c9b8f1adbcb94c8dd63d483d1
 
 
 // Global variable defining who will start each round
