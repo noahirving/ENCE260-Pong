@@ -1,6 +1,7 @@
 #ifndef COMMUNICATE_H
 #define COMMUNICATE_H
 #include "system.h"
+#include "ball.h"
 /** Checks if player is ready to start, indicated by a push of the navswitch
  * @return 1 if the navswitch has been pushed, otherwise 0 */
 bool is_ready (void);
@@ -14,5 +15,5 @@ void send_ready (void);
 
 void clear_buffer (void);
 
-
+void send_ball (Ball *self);
 #endif

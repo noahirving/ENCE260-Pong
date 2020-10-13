@@ -20,7 +20,6 @@
 #define DEFAULT_BALL_POSITION {3, 0}
 #define BALL_SPEED_INC_PERIOD 3
 #define BALL_UPDATE_PERIOD 40
-#define READY 'R'
 
 
 // Global variable defining who will start each round
@@ -158,12 +157,12 @@ void play_round (void)
                 ball_bounce_wall (&my_ball);
 
                 if (ball_hit_counter >= BALL_SPEED_INC_PERIOD) {
-                    ball_speed_increase (&my_ball);
+                    ball_increase_speed (&my_ball);
                     ball_hit_counter = 0;
                 }
 
                 if (ball_is_transferable (&my_ball)) { // Ball is on the display boundary
-                    transfer_ball (&my_ball);
+                    send_ball (&my_ball);
                     ball_on_screen = false;
                 }
 

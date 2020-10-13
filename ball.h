@@ -5,6 +5,11 @@
 #include "system.h"
 
 #define BALL_MIN_SPEED 3
+#define SCALER 10
+#define MIN_X (0 * SCALER)
+#define MAX_X ((LEDMAT_ROWS_NUM - 1) * SCALER)
+#define MIN_Y (0 * SCALER)
+#define MAX_Y ((LEDMAT_COLS_NUM - 1) * SCALER)
 
 /* Structure of a Vector. */
 typedef struct {
@@ -19,6 +24,7 @@ typedef struct {
     int8_t y_direction;
     Vector *position;
     uint8_t speed;
+    bool speed_increased;
 } Ball;
 
 
@@ -94,7 +100,7 @@ uint8_t get_ball_column (Ball *self);
 
 /** Increases the ball's speed up until the max defined speed
  * @param Address to the bal object */
-void ball_speed_increase (Ball* self);
+void ball_increase_speed (Ball* self);
 
 
 /** Updates the ledmat to display the ball's current postition
@@ -105,5 +111,8 @@ void ball_update_display (Ball* self);
 /** Flashes the ball on and off at its current position
  * @param Address of the ball object */
 void flash_ball (Ball *self);
+
+
+void invert_x_direction (Ball *self);
 
 #endif

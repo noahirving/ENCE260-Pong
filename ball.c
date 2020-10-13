@@ -8,19 +8,11 @@
 #include "timer.h"
 
 
-#define SCALER 10
-#define MIN_X (0 * SCALER)
-#define MAX_X ((LEDMAT_ROWS_NUM - 1) * SCALER)
-#define MIN_Y (0 * SCALER)
-#define MAX_Y ((LEDMAT_COLS_NUM - 1) * SCALER)
 #define DEFAULT_Y_DIRECTION 1
 #define NUM_FLASHES 4
 #define FLASH_PERIOD 60
 #define NUM_DIRECTIONS 7
 #define BALL_MAX_SPEED 6
-
-
-static bool speed_increased = false;
 
 /** Direction vectors for ball. */
 static const Vector directions[] = {
@@ -44,15 +36,15 @@ Ball new_ball (uint8_t direction_vector, Vector *position, uint8_t speed)
     position->x = position->x * SCALER;
     position->y = position->y * SCALER;
 
-    // Creates a ball with the given params and a default y_direction of one
-    Ball ball = {direction_vector, DEFAULT_Y_DIRECTION, position, speed};
+    // Creates a ball with the given params and a default y_direction of one and speed_increase = false
+    Ball ball = {direction_vector, DEFAULT_Y_DIRECTION, position, speed, false};
     return ball;
 }
 
 
 /** Inverts the x direction of the ball.
  * @param self the ball. */
-static void invert_x_direction (Ball *self)
+void invert_x_direction (Ball *self)
 {
     self->direction_vector = (NUM_DIRECTIONS - 1) - self->direction_vector;
 }
@@ -64,37 +56,6 @@ bool ball_is_transferable (Ball *self)
 {
     // If the ball is beyond the bottom of the grid and its y direction is down.
     return self->position->y  < MIN_Y && self->y_direction < 0;
-}
-
-
-/** Transfers the ball to the opponent's screen.
- * @param self the ball. */
-void transfer_ball (Ball *self)
-{
-    char message;
-    uint8_t direction_vector;
-    // Inverts x position.
-    /* Each variable must be divided seperately to avoid invalid position being sent.
-     * i.e SCALER = 10, MIN_X = 0, MAX_X = 60, self->position->x = 55
-     * position_x = 0 + 6 - 5 = 1
-     * if scaled after
-     * position_x = (0 + 60 - 55) / 10 = 0
-     * invalid as the position is scaled down to grid (0 / 10 + 55 / 10 = 5)! */
-    uint8_t position_x = MIN_X / SCALER + MAX_X / SCALER - self->position->x / SCALER;
-
-    // Inverts direction for mirrored receiver
-    invert_x_direction (self);
-    direction_vector = self->direction_vector;
-
-    // Encodes ball into char.
-    message = (direction_vector << 3) | position_x;
-
-    if (speed_increased) {
-        message |= BIT(6);
-        speed_increased = false;
-    }
-
-    ir_uart_putc (message); // Transfer ball position and vector as single character
 }
 
 
@@ -114,11 +75,16 @@ void receive_ball (Ball *ball, char message)
     ball->direction_vector = direction_vector;
 
     if (message & BIT(6)) {
-        ball_speed_increase (ball);
-        speed_increased = false;
+        ball_increase_speed (ball);
+        ball->speed_increased = false;
     }
 }
 
+Vector ball_get_position (Ball *self)
+{
+    Vector position = {self->position->x / SCALER, self->position->y / SCALER};
+    return position;
+}
 
 /** Returns if the message is an encoded ball.
  * @param message possible encoded ball. */
@@ -231,15 +197,6 @@ uint8_t get_ball_column (Ball *self)
 }
 
 
-/** Checks if the ball has hit the paddle. Occurs when the ball is in the
- * column ahead of the paddle
- * @return 1 if the ball hits the paddle otherwise 0. */
-uint8_t check_ball_hit (Ball *self)
-{
-    return (get_ball_column (self) == MAX_Y) && (get_ball(self) & get_paddle ());
-}
-
-
 /** Updates the ledmat to display the ball's current postition
  * @param Address to the ball object */
 void ball_update_display (Ball* self)
@@ -250,11 +207,11 @@ void ball_update_display (Ball* self)
 
 /** Increases the ball's speed up until the max defined speed
  * @param Address to the bal object */
-void ball_speed_increase (Ball* self)
+void ball_increase_speed (Ball* self)
 {
     if (self->speed < BALL_MAX_SPEED) {
         self->speed++;
-        speed_increased = true;
+        self->speed_increased = true;
     }
 }
 
