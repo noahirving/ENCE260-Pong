@@ -1,3 +1,9 @@
+/** @file   game.c
+    @author Noah Irving (nji29), David Frost (djf99)
+    @date   15/10/2020
+    @brief  Main game program.
+*/
+
 #include "system.h"
 #include "ledmat.h"
 #include "pacer.h"
@@ -14,12 +20,16 @@
 #define PACER_RATE 500
 #define COUNTDOWN_TIMER_RATE 500
 #define MESSAGE_RATE 20
+<<<<<<< HEAD
 #define PADDLE_LENGTH 3
 #define DEFAULT_BALL_SPEED BALL_MIN_SPEED
 #define DEFAULT_BALL_DIRECTION 3
 #define DEFAULT_BALL_POSITION {3, 0}
 #define BALL_SPEED_INC_PERIOD 3
 #define BALL_UPDATE_PERIOD 40
+=======
+#define READY 'R'
+>>>>>>> 1e57c2fec028fb1c9b8f1adbcb94c8dd63d483d1
 
 
 // Global variable defining who will start each round
@@ -40,6 +50,7 @@ void tinygl_setup (void)
 void game_init (void)
 {
     system_init ();
+    scoring_init();
     tinygl_setup ();
     navswitch_init ();
     ir_uart_init ();
@@ -58,6 +69,7 @@ void wait_for (bool (*func)(void))
 
 void connect (void)
 {
+    starting_player = false;
     tinygl_text_mode_set (TINYGL_TEXT_MODE_SCROLL);
     tinygl_text ("  READY UP");
 
@@ -123,7 +135,7 @@ void play_round (void)
 
     uint16_t ball_counter = 0;
     Vector position = DEFAULT_BALL_POSITION;
-    Ball my_ball = new_ball (DEFAULT_BALL_DIRECTION, &position, DEFAULT_BALL_SPEED);
+    Ball my_ball = new_ball (DEFAULT_BALL_DIRECTION, &position, BALL_MIN_SPEED);
 
     // Begin Game
     while (round_running) {
@@ -199,14 +211,16 @@ void play_round (void)
 
 int main (void)
 {
-    game_init ();
-    connect ();
+    while (1) {
+        game_init ();
+        connect ();
 
-    // Begin Game
-    while (!game_finished ()) {
-        play_round ();
-        display_score ();
+        // Begin Game
+        while (!game_finished ()) {
+            play_round ();
+            display_score ();
+        }
+
+        end_game ();
     }
-
-    end_game ();
 }

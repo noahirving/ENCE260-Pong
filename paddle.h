@@ -1,8 +1,15 @@
+/** @file   paddle.h
+    @author Noah Irving (nji29), David Frost (djf99)
+    @date   15/10/2020
+    @brief  Paddle controller.
+*/
+
 #ifndef PADDLE_H
 #define PADDLE_H
 
 #include "system.h"
 
+#define PADDLE_LENGTH 3
 
 /** Changes the length of the paddle.
  * @param new length of paddle. */

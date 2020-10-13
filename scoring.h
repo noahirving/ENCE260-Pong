@@ -1,7 +1,18 @@
+/** @file   scoring.h
+    @author Noah Irving (nji29), David Frost (djf99)
+    @date   15/10/2020
+    @brief  Game scoring and win conditions.
+*/
+
 #ifndef SCORING_H
 #define SCORING_H
 
 #include "system.h"
+
+
+/** Initiates the score for both players to 0 */
+void scoring_init (void);
+
 
 /** Increments opponent's score by 1 and notifies them that
  * the round is over */

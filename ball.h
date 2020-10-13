@@ -1,15 +1,26 @@
+/** @file   ball.h
+    @author Noah Irving (nji29), David Frost (djf99)
+    @date   15/10/2020
+    @brief  Ball object and methods.
+*/
+
 #ifndef BALL_H
 #define BALL_H
 
 #include "paddle.h"
 #include "system.h"
 
-#define BALL_MIN_SPEED 3
 #define SCALER 10
 #define MIN_X (0 * SCALER)
 #define MAX_X ((LEDMAT_ROWS_NUM - 1) * SCALER)
 #define MIN_Y (0 * SCALER)
 #define MAX_Y ((LEDMAT_COLS_NUM - 1) * SCALER)
+#define BALL_MIN_SPEED 3
+#define BALL_MAX_SPEED 6
+#define DEFAULT_BALL_DIRECTION 3
+#define DEFAULT_BALL_POSITION {3, 0}
+#define BALL_SPEED_INC_PERIOD 3
+#define BALL_UPDATE_PERIOD 40
 
 /* Structure of a Vector. */
 typedef struct {

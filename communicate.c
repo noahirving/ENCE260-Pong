@@ -1,3 +1,9 @@
+/** @file   communicate.c
+    @author Noah Irving (nji29), David Frost (djf99)
+    @date   15/10/2020
+    @brief  Send and receive.
+*/
+
 #include "communicate.h"
 #include "ir_uart.h"
 #include "navswitch.h"

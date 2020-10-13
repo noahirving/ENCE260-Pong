@@ -1,3 +1,9 @@
+/** @file   ball.c
+    @author Noah Irving (nji29), David Frost (djf99)
+    @date   15/10/2020
+    @brief  Ball object and methods.
+*/
+
 #include "paddle.h"
 #include "system.h"
 #include "ball.h"
@@ -12,7 +18,6 @@
 #define NUM_FLASHES 4
 #define FLASH_PERIOD 60
 #define NUM_DIRECTIONS 7
-#define BALL_MAX_SPEED 6
 
 /** Direction vectors for ball. */
 static const Vector directions[] = {
