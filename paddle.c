@@ -1,8 +1,9 @@
 /** @file   paddle.c
-    @author
-    @date
+    @author Noah Irving, David Frost
+    @date   15/10/2020
     @brief  Paddle controller.
 */
+
 #include "pio.h"
 #include "navswitch.h"
 #include "paddle.h"

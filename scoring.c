@@ -1,3 +1,9 @@
+/** @file   scoring.c
+    @author Noah Irving, David Frost
+    @date   15/10/2020
+    @brief  Game scoring and win conditions.
+*/
+
 #include "system.h"
 #include "tinygl.h"
 #include "pacer.h"

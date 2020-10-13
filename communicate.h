@@ -1,3 +1,9 @@
+/** @file   communicate.h
+    @author Noah Irving, David Frost
+    @date   15/10/2020
+    @brief  Send and receive.
+*/
+
 #ifndef COMMUNICATE_H
 #define COMMUNICATE_H
 #include "system.h"

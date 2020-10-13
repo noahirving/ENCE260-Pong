@@ -1,3 +1,9 @@
+/** @file   scoring.h
+    @author Noah Irving, David Frost
+    @date   15/10/2020
+    @brief  Game scoring and win conditions.
+*/
+
 #ifndef SCORING_H
 #define SCORING_H
 

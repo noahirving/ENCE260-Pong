@@ -1,3 +1,9 @@
+/** @file   ball.c
+    @author Noah Irving, David Frost
+    @date   15/10/2020
+    @brief  Ball object and methods.
+*/
+
 #include "paddle.h"
 #include "system.h"
 #include "ball.h"

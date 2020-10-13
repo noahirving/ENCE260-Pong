@@ -1,3 +1,9 @@
+/** @file   game.c
+    @author Noah Irving, David Frost
+    @date   15/10/2020
+    @brief  Main game program.
+*/
+
 #include "system.h"
 #include "ledmat.h"
 #include "pacer.h"

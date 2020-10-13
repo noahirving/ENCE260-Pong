@@ -1,3 +1,9 @@
+/** @file   paddle.h
+    @author Noah Irving, David Frost
+    @date   15/10/2020
+    @brief  Paddle controller.
+*/
+
 #ifndef PADDLE_H
 #define PADDLE_H
 

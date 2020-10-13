@@ -1,3 +1,9 @@
+/** @file   ball.h
+    @author Noah Irving, David Frost
+    @date   15/10/2020
+    @brief  Ball object and methods.
+*/
+
 #ifndef BALL_H
 #define BALL_H
 
