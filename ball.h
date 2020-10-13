@@ -4,6 +4,7 @@
 #include "paddle.h"
 #include "system.h"
 
+#define BALL_MIN_SPEED 3
 
 /* Structure of a Vector. */
 typedef struct {
@@ -89,6 +90,11 @@ uint8_t get_ball (Ball *self);
 /** Gets the column of the ball.
  * @param self the ball. */
 uint8_t get_ball_column (Ball *self);
+
+
+/** Increases the ball's speed up until the max defined speed
+ * @param Address to the bal object */
+void ball_speed_increase (Ball* self);
 
 
 /** Updates the ledmat to display the ball's current postition
