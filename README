@@ -1,16 +1,36 @@
-Use this directory for your final game and its module(s).  Only the
-files in this directory will be marked.
+Pong README
 
-Ensure you use the git add command to add your files to the git
-repository.  For example,
+To load the game onto the UC Fun Kit 4:
+    1. Using a terminal, go into the directory holding all the game modules and the Makefile
+    2. Enter 'make program' into the terminal for each of the to boards
 
-git add module.c
 
-Then use the git commit command to add the file contents
+Starting the Game:
+    After the game is loaded onto each board, they should both be displaying "READY UP".
+    
+    1. Make sure both players have loaded the game before continuing.
+    2. Press the navswitch down. If you pushed ready up before your opponent,
+       you will have to wait for them before the game starts.
+    
+    NOTE: Please ensure that both players do not ready up at the same time, half a second will be plenty of time to wait.
 
-git commit -m "Added file" module.c
+Playing the Game:
+    Once both players have readied up, the game will begin to count down from 3.
+    The board will then display "GO", at which point each player will have control of the paddles.
+    
+    You can move the paddle by pushing the navswitch left or right (using the same orientation as the displayed text).
+    The ball will gradually increase in speed as the round progresses.
+    
+    As soon as a player misses the ball with their paddle, the round is over and the current score is displayed.
+    A new round will begin after another countdown.
 
-The use the git push command to copy the changes to the remote git server
+    The first player to 3 wins!
 
-git push
+Starting a New Game:
+    After the game finishes, your screen will display either "LOSER" or "WINNER".
+    If you wish to start a new game, push the navswitch in to go back to the "READY UP" screen.
+    Again, make sure both players are on this screen before continuing.
+    From here, the process is the same as earlier in the 'Starting the Game' section (Step 2).
+
+
 
