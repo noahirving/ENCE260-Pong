@@ -15,11 +15,11 @@
 #define DEFAULT_PADDLE_PERIOD 40
 
 
-static uint8_t paddle_length = 3;
-static uint8_t paddle_position = 0;
+static uint8_t paddle_length;
+static uint8_t paddle_position;
+static uint16_t move_period;
+static uint8_t max_position;
 static uint16_t paddle_counter = 0;
-static uint16_t move_period = 0;
-static uint8_t max_position = 0;
 
 
 /** Shifts the paddle position to the left if it does not move

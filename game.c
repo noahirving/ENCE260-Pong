@@ -21,6 +21,7 @@
 #define READY 'R'
 
 
+// Global variable defining who will start each round
 bool starting_player = false;
 
 
@@ -39,9 +40,9 @@ void game_init (void)
 {
     system_init ();
     tinygl_setup ();
-    navswitch_init();
+    navswitch_init ();
     ir_uart_init ();
-    pacer_init(PACER_RATE);
+    pacer_init (PACER_RATE);
 }
 
 
@@ -68,7 +69,7 @@ uint8_t opponent_is_ready (void)
 void wait_for (uint8_t (*func)(void))
 {
     while (!(*func) ()) {
-        pacer_wait();
+        pacer_wait ();
         tinygl_update ();
     }
 }
@@ -85,13 +86,13 @@ void startup (void)
     if (ir_uart_read_ready_p ()) {
         // Opponent has readied up first, so send ready back so they can stop waiting
         ir_uart_getc ();
-        ir_uart_putc(READY);
+        ir_uart_putc (READY);
 
     } else {
         // First person to ready up, send ready to opponent and wait for response
-        // Whis player will also start the first round
-        ir_uart_putc(READY);
-        tinygl_clear();
+        // This player will also start the first round
+        ir_uart_putc (READY);
+        tinygl_clear ();
         tinygl_text ("  WAITING FOR OPPONENT");
         wait_for (opponent_is_ready);
         starting_player = true;
@@ -99,7 +100,7 @@ void startup (void)
 }
 
 
-/** Displays countdown after players are ready before the game starts*/
+/** Displays countdown before the each round starts*/
 void countdown (void)
 {
     uint16_t pacer_counter = 0;
@@ -135,7 +136,7 @@ void play_round (void)
     bool round_running = true;
     bool ball_on_screen = false;
 
-    /* Only display ball for the player who is starting */
+    // Only display ball for the player who is starting
     if (starting_player) {
         ball_on_screen = true;
     }
@@ -152,33 +153,33 @@ void play_round (void)
         pacer_wait ();
         navswitch_update ();
         paddle_update ();
-        paddle_update_display(); // display paddle
+        paddle_update_display ();
 
-        pacer_wait();
+        pacer_wait ();
 
         // Only performs update for the player who has the ball on their screen
         if (ball_on_screen) {
             if (ball_counter >= BALL_UPDATE_PERIOD) {
                 ball_counter = 0;
-
                 ball_update_position (&my_ball);
-                if (can_collide (&my_ball)) {
-                    if (is_colliding (&my_ball, get_paddle ())) {
+
+                if (can_collide (&my_ball)) { //Ball is in the row with the paddle
+                    if (is_colliding (&my_ball, get_paddle ())) { //Ball has hit the paddle and bounced off
                         ball_bounce_paddle (&my_ball);
                     }
-                    else {
+                    else { //Ball has missed the paddle so the round is lost
                         flash_ball (&my_ball);
                         round_running = false;
                         ball_on_screen = false;
                         starting_player = true;
-
                         lost_round ();
                     }
                 }
+
                 ball_bounce_wall (&my_ball);
 
 
-                if (ball_is_transferable (&my_ball)) {
+                if (ball_is_transferable (&my_ball)) { // Ball is on the display boundary
                     transfer_ball (&my_ball);
                     ball_on_screen = false;
                 }
@@ -193,14 +194,14 @@ void play_round (void)
 
             char message = ir_uart_getc ();
 
-            if (is_score(message)) {
+            if (is_score (message)) {
                 /* Opponent lost the round */
                 starting_player = false;
                 opponent_lost_round ();
                 round_running = false;
 
-            } else {
-                /* Ball has reached edge of opponents screen and transfered it over */
+            } else if (is_ball (message)) {
+                /* Ball has reached edge of opponents screen and transferred it over */
                 receive_ball (&my_ball, message);
                 ball_on_screen = true;
             }
