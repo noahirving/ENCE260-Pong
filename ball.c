@@ -17,7 +17,10 @@
 #define DEFAULT_Y_DIRECTION 1
 #define NUM_FLASHES 4
 #define FLASH_PERIOD 60
+#define BALL_MAX_SPEED 6
 
+
+static bool speed_increased = false;
 
 /** Direction vectors for ball. */
 static const Vector directions[] = {
@@ -85,6 +88,12 @@ void transfer_ball (Ball *self)
 
     // Encodes ball into char.
     message = (direction_vector << 3) | position_x;
+
+    if (speed_increased) {
+        message |= BIT(6);
+        speed_increased = false;
+    }
+
     ir_uart_putc (message); // Transfer ball position and vector as single character
 }
 
@@ -103,7 +112,11 @@ void receive_ball (Ball *ball, char message)
     ball->position->y = MIN_Y * SCALER;
     ball->y_direction = DEFAULT_Y_DIRECTION;
     ball->direction_vector = direction_vector;
-    ball->speed = 5; // TODO
+
+    if (message & BIT(6)) {
+        ball_speed_increase (ball);
+        speed_increased = false;
+    }
 }
 
 
@@ -161,7 +174,6 @@ void ball_bounce_paddle (Ball *self)
 
     // Reverses y_direction.
     self->y_direction = -self->y_direction;
-
 
     int8_t num = (timer_get () % 3) - 1;
     if (self->direction_vector == 0 && num == -1) {
@@ -233,6 +245,17 @@ uint8_t check_ball_hit (Ball *self)
 void ball_update_display (Ball* self)
 {
     ledmat_display_column (get_ball(self), get_ball_column(self));
+}
+
+
+/** Increases the ball's speed up until the max defined speed
+ * @param Address to the bal object */
+void ball_speed_increase (Ball* self)
+{
+    if (self->speed < BALL_MAX_SPEED) {
+        self->speed++;
+        speed_increased = true;
+    }
 }
 
 

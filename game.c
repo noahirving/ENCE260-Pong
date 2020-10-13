@@ -14,9 +14,10 @@
 #define COUNTDOWN_TIMER_RATE 500
 #define MESSAGE_RATE 20
 #define PADDLE_LENGTH 3
-#define DEFAULT_BALL_SPEED 5
+#define DEFAULT_BALL_SPEED BALL_MIN_SPEED
 #define DEFAULT_BALL_DIRECTION 3
 #define DEFAULT_BALL_POSITION {3, 0}
+#define BALL_SPEED_INC_PERIOD 3
 #define BALL_UPDATE_PERIOD 40
 #define READY 'R'
 
@@ -135,6 +136,7 @@ void play_round (void)
 {
     bool round_running = true;
     bool ball_on_screen = false;
+    uint8_t ball_hit_counter = 0;
 
     // Only display ball for the player who is starting
     if (starting_player) {
@@ -151,6 +153,7 @@ void play_round (void)
     // Begin Game
     while (round_running) {
         pacer_wait ();
+        led_set(LED1, 0);
         navswitch_update ();
         paddle_update ();
         paddle_update_display ();
@@ -166,6 +169,7 @@ void play_round (void)
                 if (can_collide (&my_ball)) { //Ball is in the row with the paddle
                     if (is_colliding (&my_ball, get_paddle ())) { //Ball has hit the paddle and bounced off
                         ball_bounce_paddle (&my_ball);
+                        ball_hit_counter++;
                     }
                     else { //Ball has missed the paddle so the round is lost
                         flash_ball (&my_ball);
@@ -178,6 +182,10 @@ void play_round (void)
 
                 ball_bounce_wall (&my_ball);
 
+                if (ball_hit_counter >= BALL_SPEED_INC_PERIOD) {
+                    ball_speed_increase (&my_ball);
+                    ball_hit_counter = 0;
+                }
 
                 if (ball_is_transferable (&my_ball)) { // Ball is on the display boundary
                     transfer_ball (&my_ball);
@@ -202,6 +210,9 @@ void play_round (void)
 
             } else if (is_ball (message)) {
                 /* Ball has reached edge of opponents screen and transferred it over */
+                if (message & BIT(6)) {
+                    ball_hit_counter = 0;
+                }
                 receive_ball (&my_ball, message);
                 ball_on_screen = true;
             }
