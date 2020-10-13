@@ -10,13 +10,13 @@
 
 #define SCALER 10
 #define MIN_X (0 * SCALER)
-#define MAX_X (6 * SCALER)
+#define MAX_X ((LEDMAT_ROWS_NUM - 1) * SCALER)
 #define MIN_Y (0 * SCALER)
-#define MAX_Y (4 * SCALER)
-#define NUM_DIRECTIONS 7
+#define MAX_Y ((LEDMAT_COLS_NUM - 1) * SCALER)
 #define DEFAULT_Y_DIRECTION 1
 #define NUM_FLASHES 4
 #define FLASH_PERIOD 60
+#define NUM_DIRECTIONS 7
 
 
 /** Direction vectors for ball. */
