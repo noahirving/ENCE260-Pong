@@ -1,6 +1,6 @@
 # File:   Makefile
-# Author: M. P. Hayes, UCECE
-# Date:   12 Sep 2010
+# Author: Noah Irving (nji29), David Frost (djf99)
+# Date:   15/10/2020
 # Descr:  Makefile for game
 
 # Definitions.

@@ -1,5 +1,5 @@
 /** @file   ball.h
-    @author Noah Irving, David Frost
+    @author Noah Irving (nji29), David Frost (djf99)
     @date   15/10/2020
     @brief  Ball object and methods.
 */
