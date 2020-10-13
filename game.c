@@ -9,6 +9,7 @@
 #include "paddle.h"
 #include "ball.h"
 #include "scoring.h"
+#include "communicate.h"
 
 #define PACER_RATE 500
 #define COUNTDOWN_TIMER_RATE 500
@@ -45,28 +46,9 @@ void game_init (void)
     pacer_init (PACER_RATE);
 }
 
-
-/** Checks if player is ready to start, indicated by a push of the navswitch
- * @return 1 if the navswitch has been pushed, otherwise 0 */
-uint8_t is_ready (void)
-{
-    navswitch_update ();
-    return navswitch_push_event_p (NAVSWITCH_PUSH);
-}
-
-
-/** Checks if opponent is ready to start indicated by the reception
- * of a 'Ready' indicator
- * @return 1 if the opponent has indicated ready, otherwise 0 */
-uint8_t opponent_is_ready (void)
-{
-    return ir_uart_read_ready_p () && ir_uart_getc () == READY;
-}
-
-
 /** Waits until the passed function returns true
  * @param *func function passed in to be evaluated for true or false */
-void wait_for (uint8_t (*func)(void))
+void wait_for (bool (*func)(void))
 {
     while (!(*func) ()) {
         pacer_wait ();
@@ -74,28 +56,22 @@ void wait_for (uint8_t (*func)(void))
     }
 }
 
-
-/** Startup sequence of the game, waits for both players to ready up before starting*/
-void startup (void)
+void connect (void)
 {
     tinygl_text_mode_set (TINYGL_TEXT_MODE_SCROLL);
     tinygl_text ("  READY UP");
 
     wait_for (is_ready);
 
-    if (ir_uart_read_ready_p ()) {
-        // Opponent has readied up first, so send ready back so they can stop waiting
-        ir_uart_getc ();
-        ir_uart_putc (READY);
 
-    } else {
-        // First person to ready up, send ready to opponent and wait for response
-        // This player will also start the first round
-        ir_uart_putc (READY);
+    if (!opponent_ready ()) {
         tinygl_clear ();
         tinygl_text ("  WAITING FOR OPPONENT");
-        wait_for (opponent_is_ready);
+        send_ready ();
+        wait_for (opponent_ready);
         starting_player = true;
+    } else {
+        send_ready ();
     }
 }
 
@@ -215,7 +191,7 @@ void play_round (void)
 int main (void)
 {
     game_init ();
-    startup ();
+    connect ();
 
     // Begin Game
     while (!game_finished ()) {
