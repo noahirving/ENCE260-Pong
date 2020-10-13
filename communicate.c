@@ -17,6 +17,7 @@
     SET_MASK (DIRECTION_VECTOR, 3, 0b111) | \
     SET_MASK (POSITION_X, 0, 0b111)
 
+
 /** Checks if player is ready to start, indicated by a push of the navswitch
  * @return 1 if the navswitch has been pushed, otherwise 0 */
 bool is_ready (void)
@@ -24,6 +25,7 @@ bool is_ready (void)
     navswitch_update ();
     return navswitch_push_event_p (NAVSWITCH_PUSH);
 }
+
 
 /** Checks if opponent is ready to start indicated by the reception
  * of a 'Ready' indicator
@@ -33,10 +35,13 @@ bool opponent_ready (void)
     return ir_uart_read_ready_p () && ir_uart_getc () == READY;
 }
 
+
+/** Sends the ready character to the opponent */
 void send_ready (void)
 {
     ir_uart_putc(READY);
 }
+
 
 /** Transfers the ball to the opponent's screen.
  * @param self the ball. */
