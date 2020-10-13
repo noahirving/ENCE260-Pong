@@ -17,7 +17,6 @@
 #define NUM_FLASHES 4
 #define FLASH_PERIOD 60
 #define NUM_DIRECTIONS 7
-#define BALL_MAX_SPEED 6
 
 
 static bool speed_increased = false;

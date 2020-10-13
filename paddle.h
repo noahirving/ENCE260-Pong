@@ -3,6 +3,7 @@
 
 #include "system.h"
 
+#define PADDLE_LENGTH 3
 
 /** Changes the length of the paddle.
  * @param new length of paddle. */

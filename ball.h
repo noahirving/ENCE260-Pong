@@ -5,6 +5,11 @@
 #include "system.h"
 
 #define BALL_MIN_SPEED 3
+#define BALL_MAX_SPEED 6
+#define DEFAULT_BALL_DIRECTION 3
+#define DEFAULT_BALL_POSITION {3, 0}
+#define BALL_SPEED_INC_PERIOD 3
+#define BALL_UPDATE_PERIOD 40
 
 /* Structure of a Vector. */
 typedef struct {

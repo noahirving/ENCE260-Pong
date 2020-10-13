@@ -14,12 +14,6 @@
 #define PACER_RATE 500
 #define COUNTDOWN_TIMER_RATE 500
 #define MESSAGE_RATE 20
-#define PADDLE_LENGTH 3
-#define DEFAULT_BALL_SPEED BALL_MIN_SPEED
-#define DEFAULT_BALL_DIRECTION 3
-#define DEFAULT_BALL_POSITION {3, 0}
-#define BALL_SPEED_INC_PERIOD 3
-#define BALL_UPDATE_PERIOD 40
 #define READY 'R'
 
 
@@ -126,7 +120,7 @@ void play_round (void)
 
     uint16_t ball_counter = 0;
     Vector position = DEFAULT_BALL_POSITION;
-    Ball my_ball = new_ball (DEFAULT_BALL_DIRECTION, &position, DEFAULT_BALL_SPEED);
+    Ball my_ball = new_ball (DEFAULT_BALL_DIRECTION, &position, BALL_MIN_SPEED);
 
     // Begin Game
     while (round_running) {
