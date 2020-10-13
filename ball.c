@@ -18,6 +18,7 @@
 #define NUM_FLASHES 4
 #define FLASH_PERIOD 60
 
+
 /** Direction vectors for ball. */
 static const Vector directions[] = {
     {-2, 1},
@@ -29,11 +30,12 @@ static const Vector directions[] = {
     {2, 1}
 };
 
+
 /** Returns a new ball.
  * @param direction_vector index of the direction vector the ball will be using.
  * @param position pointer to the position of the ball
  * @param speed speed of the ball. */
-Ball new_ball(uint8_t direction_vector, Vector *position, uint8_t speed)
+Ball new_ball (uint8_t direction_vector, Vector *position, uint8_t speed)
 {
     // Scales the position of the ball.
     position->x = position->x * SCALER;
@@ -44,12 +46,14 @@ Ball new_ball(uint8_t direction_vector, Vector *position, uint8_t speed)
     return ball;
 }
 
+
 /** Inverts the x direction of the ball.
  * @param self the ball. */
 static void invert_x_direction (Ball *self)
 {
     self->direction_vector = (NUM_DIRECTIONS - 1) - self->direction_vector;
 }
+
 
 /** Returns true if the ball is transferable.
  * @param self the ball. */
@@ -58,6 +62,7 @@ bool ball_is_transferable (Ball *self)
     // If the ball is beyond the bottom of the grid and its y direction is down.
     return self->position->y  < MIN_Y && self->y_direction < 0;
 }
+
 
 /** Transfers the ball to the opponent's screen.
  * @param self the ball. */
@@ -83,6 +88,7 @@ void transfer_ball (Ball *self)
     ir_uart_putc (message); // Transfer ball position and vector as single character
 }
 
+
 /** Receives the ball from the opponent's screen.
  * @param ball the ball to set
  * @param message encoded ball. */
@@ -93,13 +99,13 @@ void receive_ball (Ball *ball, char message)
     // Decodes direction vector (next 3 bits).
     uint8_t direction_vector = (message >> 3) & 0b111;
 
-
     ball->position->x = position_x * SCALER;
     ball->position->y = MIN_Y * SCALER;
     ball->y_direction = DEFAULT_Y_DIRECTION;
     ball->direction_vector = direction_vector;
     ball->speed = 5; // TODO
 }
+
 
 /** Returns if the message is an encoded ball.
  * @param message possible encoded ball. */
@@ -109,6 +115,7 @@ bool is_ball (char message)
     return ~(message >> 7);
 }
 
+
 /** Returns if the ball can collide with the paddle.
  * @param self the ball. */
 bool can_collide (Ball *self)
@@ -116,6 +123,7 @@ bool can_collide (Ball *self)
     // If the ball has the same y position as the paddle.
     return self->position->y >= MAX_Y; // TODO; Change to paddle position
 }
+
 
 /** Returns if the ball is colliding with the paddle.
  * @param self the ball
@@ -125,6 +133,7 @@ bool is_colliding (Ball *self,  uint8_t paddle_bitmap)
     // If the ball's bitmap and paddle's bitmap cross.
     return get_ball (self) & paddle_bitmap;
 }
+
 
 /** Gets the ball's direction vector.
  * @param self the ball. */
@@ -137,6 +146,7 @@ static Vector ball_get_direction (Ball *self)
 
     return direction;
 }
+
 
 /** Bounces the ball off the paddle.
  * @param self the ball. */
@@ -166,6 +176,7 @@ void ball_bounce_paddle (Ball *self)
     ball_update_position (self);
 }
 
+
 /** Bounces ball off wall if on wall.
  * @param self the ball. */
 void ball_bounce_wall (Ball *self)
@@ -181,6 +192,7 @@ void ball_bounce_wall (Ball *self)
     }
 }
 
+
 /** Updates the balls position.
  * @param self the ball. */
 void ball_update_position (Ball *self)
@@ -190,12 +202,14 @@ void ball_update_position (Ball *self)
     self->position->y += direction.y * self->speed;
 }
 
+
 /** Gets the position of the ball as a bit pattern.
  * @param self the ball. */
 uint8_t get_ball (Ball *self)
 {
     return (1 << (self->position->x / SCALER));
 }
+
 
 /** Gets the column of the ball.
  * @param self the ball. */

@@ -63,8 +63,8 @@ void display_score (void)
 {
     /* Format of the score display. '#' is a placeholder for the score of each player */
     char score[] = {' ', ' ', '#', '-', '#', ' ', ' '};
-    score[2] = get_your_score() + '0';
-    score[4] = get_opponent_score() + '0';
+    score[2] = get_your_score () + '0';
+    score[4] = get_opponent_score () + '0';
 
     tinygl_text_mode_set (TINYGL_TEXT_MODE_SCROLL);
     tinygl_clear ();
