@@ -145,7 +145,7 @@ void play_round (void)
                 ball_bounce_wall (&my_ball);
 
                 if (can_collide (&my_ball)) { //Ball is in the row with the paddle
-                    if (is_colliding (&my_ball, get_paddle ())) { //Ball has hit the paddle and bounced off
+                    if (is_colliding (&my_ball, paddle_get_pattern ())) { //Ball has hit the paddle and bounced off
 
                         ball_bounce_paddle (&my_ball);
                         ball_hit_counter++;

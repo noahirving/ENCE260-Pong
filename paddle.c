@@ -81,7 +81,7 @@ void paddle_update (void)
 
 /** Gets the paddle as a single row bitmap.
  * @return 8 bit pattern representing the paddles location */
-uint8_t get_paddle_pattern (void)
+uint8_t paddle_get_pattern (void)
 {
     uint8_t paddle = 0;
     for (uint8_t i = 0; i < paddle_length; i++) {
@@ -120,7 +120,7 @@ void paddle_set_period (uint16_t period)
 /** Updates the ledmat to display the paddle's current postition */
 void paddle_update_display (void)
 {
-    ledmat_display_column (get_paddle(), 4);
+    ledmat_display_column (paddle_get_pattern(), 4);
 }
 
 

@@ -33,7 +33,7 @@ void paddle_update (void);
 
 /** Gets the paddle as a single row bitmap.
  * @return 8 bit pattern representing the paddles location */
-uint8_t get_paddle_pattern (void);
+uint8_t paddle_get_pattern (void);
 
 
 /** Updates the ledmat to display the paddle's current postition */
