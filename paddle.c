@@ -58,6 +58,7 @@ void paddle_init (uint8_t new_length)
 /** Updates the paddles position when the navswitch is pushed. */
 void paddle_update (void)
 {
+    navswitch_update ();
     /* If the counter has reached the period.
      * Else the counter is incremented. */
     if (paddle_counter >= move_period) {

@@ -32,12 +32,6 @@ bool game_finished (void);
 void display_score (void);
 
 
-/** Checks if a received message is score related by checking the largest bit (control bit)
- * @param message The received message
- * @return true if the control bit is 1, otherwise false */
-bool is_score (char message);
-
-
 /** Checks who won the game and displays corresponding message */
 void end_game (void);
 

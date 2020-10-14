@@ -86,13 +86,23 @@ void receive_ball (Ball *ball, char message)
 }
 
 
+/** Checks if a received message is score related by checking the largest bit (control bit)
+ * @param message The received message
+ * @return true if the control bit is 1, otherwise false */
+static bool is_score (char message)
+{
+    return message & BIT(7);
+}
+
+
 /** Returns if the message is an encoded ball.
  * @param message possible encoded ball. */
-bool is_ball (char message)
+static bool is_ball (char message)
 {
     // Message is ball if 8th bit is '0'
     return (~message) & BIT(7);
 }
+
 
 Message_type get_message (char* message)
 {
@@ -100,10 +110,9 @@ Message_type get_message (char* message)
         *message = ir_uart_getc ();
         if (is_ball (*message)) {
             return MESSAGE_BALL;
-        } else {
+        } else if (is_score (*message)) {
             return MESSAGE_SCORE;
         }
-    } else {
-        return MESSAGE_EMPTY;
     }
+    return MESSAGE_EMPTY;
 }

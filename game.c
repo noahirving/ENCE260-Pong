@@ -132,7 +132,6 @@ void play_round (void)
     // Begin Round
     while (round_running) {
         pacer_wait ();
-        navswitch_update ();
         paddle_update ();
         paddle_update_display ();
 
