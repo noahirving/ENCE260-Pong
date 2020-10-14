@@ -70,14 +70,6 @@ Vector ball_get_position (Ball *self)
     return position;
 }
 
-/** Returns if the message is an encoded ball.
- * @param message possible encoded ball. */
-bool is_ball (char message)
-{
-    // Message is ball if 8th bit is '0'
-    return ~(message >> 7);
-}
-
 
 /** Returns if the ball can collide with the paddle.
  * @param self Address of the ball. */
@@ -153,11 +145,11 @@ void ball_bounce_wall (Ball* self)
 {
     Vector position = ball_get_position(self);
     // If on walls or beyond walls, sets position to wall and inverts x direction.
-    if (position.x <= MIN_X) {
+    if (position.x < MIN_X) {
         self->position->x = MIN_X * SCALER;
         invert_x_direction (self);
 
-    } else if (position.x >= MAX_X) {
+    } else if (position.x > MAX_X) {
         self->position->x = MAX_X * SCALER;
         invert_x_direction (self);
     }

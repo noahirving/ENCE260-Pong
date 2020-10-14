@@ -77,11 +77,6 @@ void ball_update_position (Ball* self);
 bool ball_is_transferable (Ball* self);
 
 
-/** Returns if the message is an encoded ball.
- * @param message possible encoded ball. */
-bool is_ball (char message);
-
-
 /** Increases the ball's speed up until the max defined speed
  * @param self Address to the bal object */
 void ball_increase_speed (Ball* self);

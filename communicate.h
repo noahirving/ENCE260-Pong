@@ -9,6 +9,12 @@
 #include "system.h"
 #include "ball.h"
 
+typedef enum {
+    MESSAGE_EMPTY,
+    MESSAGE_BALL,
+    MESSAGE_SCORE
+} Message_type;
+
 
 /** Checks if player is ready to start, indicated by a push of the navswitch
  * @return 1 if the navswitch has been pushed, otherwise 0 */
@@ -30,4 +36,8 @@ void send_ready (void);
 void send_ball (Ball *self);
 
 void receive_ball (Ball *ball, char message);
+
+
+Message_type get_message (char* message);
+
 #endif

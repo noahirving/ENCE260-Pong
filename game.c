@@ -176,24 +176,21 @@ void play_round (void)
             }
         }
 
-        if (ir_uart_read_ready_p ()) {
 
-            char message = ir_uart_getc ();
 
-            if (is_score (message)) {
-                // Opponent lost the round
-                starting_player = false;
-                opponent_lost_round ();
-                round_running = false;
-
-            } else if (is_ball (message)) {
-                // Ball has reached edge of opponent's screen and transferred it over
-                if (message & BIT(6)) { //Ball speed increased on opponent's screen
-                    ball_hit_counter = 0;
-                }
-                receive_ball (&my_ball, message);
-                ball_on_screen = true;
+        char message = 0;
+        Message_type type = get_message (&message);
+        if (type == MESSAGE_BALL) {
+            // Ball has reached edge of opponent's screen and transferred it over
+            if (message & BIT(6)) { //Ball speed increased on opponent's screen
+                ball_hit_counter = 0;
             }
+            receive_ball (&my_ball, message);
+            ball_on_screen = true;
+        } else if (type == MESSAGE_SCORE) {
+            starting_player = false;
+            opponent_lost_round ();
+            round_running = false;
         }
 
         ball_counter ++;

@@ -12,10 +12,8 @@
 #define READY 'R'
 #define GET_MASK(NUM,POS,MASK) ((NUM >> POS) & MASK)
 #define SET_MASK(NUM,POS,MASK) ((NUM & MASK) << POS)
-#define ENCODE_BALL(SPEED_INCREASED,DIRECTION_VECTOR,POSITION_X) \
-    SET_MASK (SPEED_INCREASED, 6, 0b1) | \
-    SET_MASK (DIRECTION_VECTOR, 3, 0b111) | \
-    SET_MASK (POSITION_X, 0, 0b111)
+
+
 
 
 /** Checks if player is ready to start, indicated by a push of the navswitch
@@ -84,5 +82,28 @@ void receive_ball (Ball *ball, char message)
     if (speed_increased) {
         ball_increase_speed (ball);
         ball->speed_increased = false;
+    }
+}
+
+
+/** Returns if the message is an encoded ball.
+ * @param message possible encoded ball. */
+bool is_ball (char message)
+{
+    // Message is ball if 8th bit is '0'
+    return message & BIT(8);
+}
+
+Message_type get_message (char* message)
+{
+    if (ir_uart_read_ready_p ()) {
+        *message = ir_uart_getc ();
+        if (is_ball (*message)) {
+            return MESSAGE_BALL;
+        } else {
+            return MESSAGE_SCORE;
+        }
+    } else {
+        return MESSAGE_EMPTY;
     }
 }
