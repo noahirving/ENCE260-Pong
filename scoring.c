@@ -41,6 +41,7 @@ void opponent_lost_round (void)
     your_score++;
 }
 
+
 /** Gets your score
  * @return your score */
 static uint8_t get_your_score (void)

@@ -46,6 +46,7 @@ void game_init (void)
     pacer_init (PACER_RATE);
 }
 
+
 /** Waits until the passed function returns true
  * @param *func function passed in to be evaluated for true or false */
 void wait_for (bool (*func)(void))
@@ -56,6 +57,9 @@ void wait_for (bool (*func)(void))
     }
 }
 
+
+/** Connects to the opponent by sending ready
+ *  to them and waiting for response */
 void connect (void)
 {
     starting_player = false;
@@ -63,7 +67,6 @@ void connect (void)
     tinygl_text ("  READY UP");
 
     wait_for (is_ready);
-
 
     if (!opponent_ready ()) {
         tinygl_clear ();
@@ -77,7 +80,7 @@ void connect (void)
 }
 
 
-/** Displays countdown before the each round starts*/
+/** Displays countdown before each round starts*/
 void countdown (void)
 {
     uint16_t pacer_counter = 0;
@@ -126,14 +129,14 @@ void play_round (void)
     Vector position = DEFAULT_BALL_POSITION;
     Ball my_ball = new_ball (DEFAULT_BALL_DIRECTION, &position, BALL_MIN_SPEED);
 
-    // Begin Game
+    // Begin Round
     while (round_running) {
         pacer_wait ();
         navswitch_update ();
         paddle_update ();
         paddle_update_display ();
 
-        pacer_wait ();
+        pacer_wait (); // Second pacer wait allows display to switch between dislaying the paddle and the ball
 
         // Only performs update for the player who has the ball on their screen
         if (ball_on_screen) {
@@ -178,14 +181,14 @@ void play_round (void)
             char message = ir_uart_getc ();
 
             if (is_score (message)) {
-                /* Opponent lost the round */
+                // Opponent lost the round
                 starting_player = false;
                 opponent_lost_round ();
                 round_running = false;
 
             } else if (is_ball (message)) {
-                /* Ball has reached edge of opponents screen and transferred it over */
-                if (message & BIT(6)) {
+                // Ball has reached edge of opponent's screen and transferred it over
+                if (message & BIT(6)) { //Ball speed increased on opponent's screen
                     ball_hit_counter = 0;
                 }
                 receive_ball (&my_ball, message);
