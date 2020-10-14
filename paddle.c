@@ -79,8 +79,9 @@ void paddle_update (void)
 }
 
 
-/** Gets the paddle as a single row bitmap. */
-uint8_t get_paddle (void)
+/** Gets the paddle as a single row bitmap.
+ * @return 8 bit pattern representing the paddles location */
+uint8_t get_paddle_pattern (void)
 {
     uint8_t paddle = 0;
     for (uint8_t i = 0; i < paddle_length; i++) {

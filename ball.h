@@ -42,18 +42,21 @@ typedef struct {
 /** Returns a new ball.
  * @param direction_vector index of the direction vector the ball will be using.
  * @param position pointer to the position of the ball
- * @param speed speed of the ball. */
+ * @param speed speed of the ball.
+ * @return new Ball object*/
 Ball new_ball(uint8_t direction_vector, Vector* position, uint8_t speed);
 
 
 /** Returns if the ball can collide with the paddle.
- * @param self Address of the ball. */
+ * @param self Address of the ball.
+ * @return true if the ball is can hit the paddle (i.e. ball is in the bottom row), othwerwise false */
 bool can_collide (Ball* self);
 
 
 /** Returns if the ball is colliding with the paddle.
  * @param self Address of the ball
- * @param paddle_pattern Bit pattern representing the paddle */
+ * @param paddle_pattern Bit pattern representing the paddle
+ * @return true if the ball is colliding with the paddle, otherwise false */
 bool is_colliding (Ball* self,  uint8_t paddle_bitmap);
 
 
@@ -73,7 +76,8 @@ void ball_update_position (Ball* self);
 
 
 /** Returns true if the ball is transferable.
- * @param self Address of the ball. */
+ * @param self Address of the ball.
+ * @return true if the ball can be transferred, otherwise false */
 bool ball_is_transferable (Ball* self);
 
 
@@ -97,8 +101,9 @@ void flash_ball (Ball* self);
 void invert_x_direction (Ball* self);
 
 
-/** Gets the position vecotr of the ball
- * @param self Address of the ball */
+/** Gets the position Vector of the ball
+ * @param self Address of the ball
+ * @return position vector of the ball */
 Vector ball_get_position (Ball* self);
 
 #endif

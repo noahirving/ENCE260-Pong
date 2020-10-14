@@ -23,8 +23,7 @@ void paddle_set_period (uint16_t period);
 
 
 /** Initializes the paddle.
- * @param new_length length of the paddle
- * @param new_period paddle update period */
+ * @param new_length length of the paddle */
 void paddle_init (uint8_t new_length);
 
 
@@ -32,8 +31,9 @@ void paddle_init (uint8_t new_length);
 void paddle_update (void);
 
 
-/** Gets the paddle as a single row bitmap. */
-uint8_t get_paddle (void);
+/** Gets the paddle as a single row bitmap.
+ * @return 8 bit pattern representing the paddles location */
+uint8_t get_paddle_pattern (void);
 
 
 /** Updates the ledmat to display the paddle's current postition */

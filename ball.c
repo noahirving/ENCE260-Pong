@@ -34,7 +34,8 @@ static const Vector directions[] = {
 /** Returns a new ball.
  * @param direction_vector index of the direction vector the ball will be using.
  * @param position pointer to the position of the ball
- * @param speed speed of the ball. */
+ * @param speed speed of the ball.
+ * @return new Ball object*/
 Ball new_ball (uint8_t direction_vector, Vector* position, uint8_t speed)
 {
     // Scales the position of the ball.
@@ -56,7 +57,8 @@ void invert_x_direction (Ball* self)
 
 
 /** Returns true if the ball is transferable.
- * @param self Address of the ball. */
+ * @param self Address of the ball.
+ * @return true if the ball can be transferred, otherwise false */
 bool ball_is_transferable (Ball* self)
 {
     // If the ball is beyond the bottom of the grid and its y direction is down.
@@ -64,7 +66,10 @@ bool ball_is_transferable (Ball* self)
 }
 
 
-Vector ball_get_position (Ball *self)
+/** Gets the position Vector of the ball
+ * @param self Address of the ball
+ * @return position vector of the ball */
+Vector ball_get_position (Ball* self)
 {
     Vector position = {self->position->x / SCALER, self->position->y / SCALER};
     return position;
@@ -72,7 +77,8 @@ Vector ball_get_position (Ball *self)
 
 
 /** Returns if the ball can collide with the paddle.
- * @param self Address of the ball. */
+ * @param self Address of the ball.
+ * @return true if the ball is can hit the paddle (i.e. ball is in the bottom row), othwerwise false */
 bool can_collide (Ball* self)
 {
     // If the ball has the same y position as the paddle.
@@ -81,7 +87,8 @@ bool can_collide (Ball* self)
 
 
 /** Gets the position of the ball as a bit pattern.
- * @param self Address of the ball. */
+ * @param self Address of the ball.
+ * @return 8 bit number representing the ball's position as a pattern*/
 static uint8_t ball_get_pattern (Ball* self)
 {
     return (1 << ball_get_position(self).x);
@@ -90,7 +97,8 @@ static uint8_t ball_get_pattern (Ball* self)
 
 /** Returns if the ball is colliding with the paddle.
  * @param self Address of the ball
- * @param paddle_pattern Bit pattern representing the paddle */
+ * @param paddle_pattern Bit pattern representing the paddle
+ * @return true if the ball is colliding with the paddle, otherwise false */
 bool is_colliding (Ball* self,  uint8_t paddle_pattern)
 {
     // If the ball's pattern and paddle's pattern cross.
@@ -99,7 +107,8 @@ bool is_colliding (Ball* self,  uint8_t paddle_pattern)
 
 
 /** Gets the ball's direction vector.
- * @param self Address of the ball. */
+ * @param self Address of the ball.
+ * @return the direction vector of the ball*/
 static Vector ball_get_direction (Ball* self)
 {
     Vector direction;
@@ -163,8 +172,6 @@ void ball_update_position (Ball* self)
     self->position->x += direction.x * self->speed;
     self->position->y += direction.y * self->speed;
 }
-
-
 
 
 /** Updates the ledmat to display the ball's current postition

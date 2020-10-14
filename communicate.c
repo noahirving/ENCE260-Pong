@@ -14,8 +14,6 @@
 #define SET_MASK(NUM,POS,MASK) ((NUM & MASK) << POS)
 
 
-
-
 /** Checks if player is ready to start, indicated by a push of the navswitch
  * @return 1 if the navswitch has been pushed, otherwise 0 */
 bool is_ready (void)
@@ -42,7 +40,7 @@ void send_ready (void)
 
 
 /** Transfers the ball to the opponent's screen.
- * @param self the ball. */
+ * @param self Address of the ball. */
 void send_ball (Ball* self)
 {
     char message = 0;
@@ -104,6 +102,9 @@ static bool is_ball (char message)
 }
 
 
+/** Gets the type of message passed through infra-red
+ * @param message The message being sent
+ * @return Message_type enum representing either a score, ball, or indicates if empty */
 Message_type get_message (char* message)
 {
     if (ir_uart_read_ready_p ()) {
