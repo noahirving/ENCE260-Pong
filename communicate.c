@@ -47,24 +47,42 @@ void send_ready (void)
  * @param self the ball. */
 void send_ball (Ball *self)
 {
-    char message;
-    // Inverts x position.
-    /* Each variable must be divided seperately to avoid invalid position being sent.
-     * i.e SCALER = 10, MIN_X = 0, MAX_X = 60, self->position->x = 55
-     * position_x = 0 + 6 - 5 = 1
-     * if scaled after
-     * position_x = (0 + 60 - 55) / 10 = 0
-     * invalid as the position is scaled down to grid (0 / 10 + 55 / 10 = 5)! */
-    uint8_t position_x = MIN_X / SCALER + MAX_X / SCALER - self->position->x / SCALER;
+    char message = 0;
+    // Inverts x position.*/
+    uint8_t position_x = MAX_X - ball_get_position (self).x;
 
     // Inverts direction for mirrored receiver
     invert_x_direction (self);
 
     // Encodes ball into char.
-    message = ENCODE_BALL(self->speed_increased,self->direction_vector,position_x);
+    message |= SET_MASK (position_x, 0, 0b111);
+    message |= SET_MASK (self->direction_vector, 3, 0b111);
+    message |= SET_MASK (self->speed_increased, 6, 0b1);
+
     if (self->speed_increased) {
         self->speed_increased = false;
     }
 
     ir_uart_putc (message); // Transfer ball position and vector as single character
+}
+
+/** Receives the ball from the opponent's screen.
+ * @param ball the ball to set
+ * @param message encoded ball. */
+void receive_ball (Ball *ball, char message)
+{
+    uint8_t position_x = GET_MASK (message, 0, 0b111);
+    uint8_t direction_vector = GET_MASK (message, 3, 0b111);
+    uint8_t speed_increased = GET_MASK (message, 6, 0b1);
+
+    ball->position->x = position_x * SCALER;
+    ball->position->y = MIN_Y * SCALER;
+
+    ball->y_direction = 1;
+    ball->direction_vector = direction_vector;
+
+    if (speed_increased) {
+        ball_increase_speed (ball);
+        ball->speed_increased = false;
+    }
 }

@@ -28,4 +28,6 @@ void send_ready (void);
 /** Transfers the ball to the opponent's screen.
  * @param self the ball. */
 void send_ball (Ball *self);
+
+void receive_ball (Ball *ball, char message);
 #endif

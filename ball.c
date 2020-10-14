@@ -64,27 +64,6 @@ bool ball_is_transferable (Ball *self)
 }
 
 
-/** Receives the ball from the opponent's screen.
- * @param ball the ball to set
- * @param message encoded ball. */
-void receive_ball (Ball *ball, char message)
-{
-    // Decodes x position (first 3 bits).
-    uint8_t position_x = message & 0b111;
-    // Decodes direction vector (next 3 bits).
-    uint8_t direction_vector = (message >> 3) & 0b111;
-
-    ball->position->x = position_x * SCALER;
-    ball->position->y = MIN_Y * SCALER;
-    ball->y_direction = DEFAULT_Y_DIRECTION;
-    ball->direction_vector = direction_vector;
-
-    if (message & BIT(6)) {
-        ball_increase_speed (ball);
-        ball->speed_increased = false;
-    }
-}
-
 Vector ball_get_position (Ball *self)
 {
     Vector position = {self->position->x / SCALER, self->position->y / SCALER};

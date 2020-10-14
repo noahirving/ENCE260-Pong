@@ -31,7 +31,7 @@ typedef struct {
 
 /*Structure of a ball. */
 typedef struct {
-    uint8_t direction_vector;
+    int8_t direction_vector;
     int8_t y_direction;
     Vector *position;
     uint8_t speed;
@@ -75,11 +75,6 @@ void ball_update_position (Ball *self);
 /** Returns true if the ball is transferable.
  * @param self the ball. */
 bool ball_is_transferable (Ball *self);
-
-/** Receives the ball from the opponent's screen.
- * @param ball the ball to set
- * @param message encoded ball. */
-void receive_ball (Ball *ball, char message);
 
 
 /** Returns if the message is an encoded ball.
