@@ -11,10 +11,10 @@
 #include "system.h"
 
 #define SCALER 10
-#define MIN_X (0 * SCALER)
-#define MAX_X ((LEDMAT_ROWS_NUM - 1) * SCALER)
-#define MIN_Y (0 * SCALER)
-#define MAX_Y ((LEDMAT_COLS_NUM - 1) * SCALER)
+#define MIN_X 0
+#define MAX_X (LEDMAT_ROWS_NUM - 1)
+#define MIN_Y 0
+#define MAX_Y (LEDMAT_COLS_NUM - 1)
 #define BALL_MIN_SPEED 3
 #define BALL_MAX_SPEED 6
 #define DEFAULT_BALL_DIRECTION 3
@@ -44,12 +44,6 @@ typedef struct {
  * @param position pointer to the position of the ball
  * @param speed speed of the ball. */
 Ball new_ball(uint8_t direction_vector, Vector *position, uint8_t speed);
-
-
-/** Checks if the ball has hit the paddle. Occurs when the ball is in the
- * column ahead of the paddle
- * @return 1 if the ball hits the paddle otherwise 0 */
-uint8_t check_ball_hit (Ball *self);
 
 
 /** Returns if the ball can collide with the paddle.
@@ -82,12 +76,6 @@ void ball_update_position (Ball *self);
  * @param self the ball. */
 bool ball_is_transferable (Ball *self);
 
-
-/** Transfers the ball to the opponent's screen.
- * @param self the ball. */
-void transfer_ball (Ball *self);
-
-
 /** Receives the ball from the opponent's screen.
  * @param ball the ball to set
  * @param message encoded ball. */
@@ -97,16 +85,6 @@ void receive_ball (Ball *ball, char message);
 /** Returns if the message is an encoded ball.
  * @param message possible encoded ball. */
 bool is_ball (char message);
-
-
-/** Gets the position of the ball as a bit pattern.
- * @param self the ball. */
-uint8_t get_ball (Ball *self);
-
-
-/** Gets the column of the ball.
- * @param self the ball. */
-uint8_t get_ball_column (Ball *self);
 
 
 /** Increases the ball's speed up until the max defined speed
@@ -123,7 +101,8 @@ void ball_update_display (Ball* self);
  * @param Address of the ball object */
 void flash_ball (Ball *self);
 
-
 void invert_x_direction (Ball *self);
+
+Vector ball_get_position (Ball *self);
 
 #endif
