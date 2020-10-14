@@ -60,7 +60,7 @@ void invert_x_direction (Ball *self)
 bool ball_is_transferable (Ball *self)
 {
     // If the ball is beyond the bottom of the grid and its y direction is down.
-    return self->position->y  < MIN_Y && self->y_direction < 0;
+    return ball_get_position(self).y  < MIN_Y && self->y_direction < 0;
 }
 
 
@@ -105,17 +105,25 @@ bool is_ball (char message)
 bool can_collide (Ball *self)
 {
     // If the ball has the same y position as the paddle.
-    return self->position->y >= MAX_Y; // TODO; Change to paddle position
+    return ball_get_position(self).y >= MAX_Y; // TODO; Change to paddle position
+}
+
+
+/** Gets the position of the ball as a bit pattern.
+ * @param self the ball. */
+static uint8_t ball_get_pattern (Ball *self)
+{
+    return (1 << ball_get_position(self).x);
 }
 
 
 /** Returns if the ball is colliding with the paddle.
  * @param self the ball
- * @param paddle_bitmap. */
-bool is_colliding (Ball *self,  uint8_t paddle_bitmap)
+ * @param paddle_pattern. */
+bool is_colliding (Ball *self,  uint8_t paddle_pattern)
 {
-    // If the ball's bitmap and paddle's bitmap cross.
-    return get_ball (self) & paddle_bitmap;
+    // If the ball's pattern and paddle's pattern cross.
+    return ball_get_pattern(self) & paddle_pattern;
 }
 
 
@@ -164,13 +172,14 @@ void ball_bounce_paddle (Ball *self)
  * @param self the ball. */
 void ball_bounce_wall (Ball *self)
 {
+    Vector position = ball_get_position(self);
     // If on walls or beyond walls, sets position to wall and inverts x direction.
-    if (self->position->x <= MIN_X) {
-        self->position->x = MIN_X;
+    if (position.x <= MIN_X) {
+        self->position->x = MIN_X * SCALER;
         invert_x_direction (self);
 
-    } else if (self->position->x >= MAX_X) {
-        self->position->x = MAX_X;
+    } else if (position.x >= MAX_X) {
+        self->position->x = MAX_X * SCALER;
         invert_x_direction (self);
     }
 }
@@ -186,27 +195,13 @@ void ball_update_position (Ball *self)
 }
 
 
-/** Gets the position of the ball as a bit pattern.
- * @param self the ball. */
-uint8_t get_ball (Ball *self)
-{
-    return (1 << (self->position->x / SCALER));
-}
-
-
-/** Gets the column of the ball.
- * @param self the ball. */
-uint8_t get_ball_column (Ball *self)
-{
-    return self->position->y / SCALER;
-}
 
 
 /** Updates the ledmat to display the ball's current postition
  * @param Address to the ball object */
 void ball_update_display (Ball* self)
 {
-    ledmat_display_column (get_ball(self), get_ball_column(self));
+    ledmat_display_column (ball_get_pattern(self), ball_get_position(self).y);
 }
 
 
