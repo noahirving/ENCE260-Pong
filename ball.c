@@ -145,13 +145,12 @@ void ball_bounce_wall (Ball* self)
 {
     Vector position = ball_get_position(self);
     // If on walls or beyond walls, sets position to wall and inverts x direction.
-    if (position.x < MIN_X) {
-        self->position->x = MIN_X * SCALER;
+    if (position.x < MIN_X || position.x > MAX_X) {
+        Vector direction = ball_get_direction (self);
+        self->position->x -= direction.x * self->speed;
+        self->position->y -= direction.y * self->speed;
         invert_x_direction (self);
-
-    } else if (position.x > MAX_X) {
-        self->position->x = MAX_X * SCALER;
-        invert_x_direction (self);
+        ball_update_position (self);
     }
 }
 

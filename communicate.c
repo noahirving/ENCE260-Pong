@@ -91,7 +91,7 @@ void receive_ball (Ball *ball, char message)
 bool is_ball (char message)
 {
     // Message is ball if 8th bit is '0'
-    return message & BIT(8);
+    return (~message) & BIT(7);
 }
 
 Message_type get_message (char* message)
