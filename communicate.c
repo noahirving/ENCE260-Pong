@@ -45,7 +45,7 @@ void send_ready (void)
 
 /** Transfers the ball to the opponent's screen.
  * @param self the ball. */
-void send_ball (Ball *self)
+void send_ball (Ball* self)
 {
     char message = 0;
     // Inverts x position.*/

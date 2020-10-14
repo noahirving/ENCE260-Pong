@@ -43,38 +43,38 @@ typedef struct {
  * @param direction_vector index of the direction vector the ball will be using.
  * @param position pointer to the position of the ball
  * @param speed speed of the ball. */
-Ball new_ball(uint8_t direction_vector, Vector *position, uint8_t speed);
+Ball new_ball(uint8_t direction_vector, Vector* position, uint8_t speed);
 
 
 /** Returns if the ball can collide with the paddle.
- * @param self the ball. */
-bool can_collide (Ball *self);
+ * @param self Address of the ball. */
+bool can_collide (Ball* self);
 
 
 /** Returns if the ball is colliding with the paddle.
- * @param self the ball
- * @param paddle_bitmap. */
-bool is_colliding (Ball *self,  uint8_t paddle_bitmap);
+ * @param self Address of the ball
+ * @param paddle_pattern Bit pattern representing the paddle */
+bool is_colliding (Ball* self,  uint8_t paddle_bitmap);
 
 
 /** Bounces the ball off the paddle.
- * @param self the ball. */
-void ball_bounce_paddle (Ball *self);
+ * @param self Address of the ball. */
+void ball_bounce_paddle (Ball* self);
 
 
 /** Bounces ball off wall if on wall.
- * @param self the ball. */
-void ball_bounce_wall (Ball * self);
+ * @param self Address of the ball. */
+void ball_bounce_wall (Ball* self);
 
 
 /** Updates the balls position.
- * @param self the ball. */
-void ball_update_position (Ball *self);
+ * @param self Address of the ball. */
+void ball_update_position (Ball* self);
 
 
 /** Returns true if the ball is transferable.
- * @param self the ball. */
-bool ball_is_transferable (Ball *self);
+ * @param self Address of the ball. */
+bool ball_is_transferable (Ball* self);
 
 
 /** Returns if the message is an encoded ball.
@@ -83,21 +83,27 @@ bool is_ball (char message);
 
 
 /** Increases the ball's speed up until the max defined speed
- * @param Address to the bal object */
+ * @param self Address to the bal object */
 void ball_increase_speed (Ball* self);
 
 
 /** Updates the ledmat to display the ball's current postition
- * @param Address to the ball object */
+ * @param self Address to the ball object */
 void ball_update_display (Ball* self);
 
 
 /** Flashes the ball on and off at its current position
- * @param Address of the ball object */
-void flash_ball (Ball *self);
+ * @param self Address of the ball object */
+void flash_ball (Ball* self);
 
-void invert_x_direction (Ball *self);
 
-Vector ball_get_position (Ball *self);
+/** Inverts the x direction of the ball.
+ * @param self Address of the ball. */
+void invert_x_direction (Ball* self);
+
+
+/** Gets the position vecotr of the ball
+ * @param self Address of the ball */
+Vector ball_get_position (Ball* self);
 
 #endif
