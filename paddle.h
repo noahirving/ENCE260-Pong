@@ -11,6 +11,7 @@
 
 #define PADDLE_LENGTH 3
 
+
 /** Changes the length of the paddle.
  * @param new length of paddle. */
 void paddle_set_length (uint8_t length);
