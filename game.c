@@ -175,6 +175,8 @@ void play_round (void)
 }
 
 
+
+/** Game loop. */
 int main (void)
 {
     while (1) {

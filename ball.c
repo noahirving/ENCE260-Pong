@@ -18,6 +18,7 @@
 #define NUM_FLASHES 4
 #define FLASH_PERIOD 60
 #define NUM_DIRECTIONS 7
+#define RANDOM_DIRECTION_RANGE 3
 
 /** Direction vectors for ball. */
 static const Vector directions[] = {
@@ -142,6 +143,22 @@ static void ball_revert_position (Ball* ball, Vector* direction)
 
 
 
+/** Sets a random direction for the ball.
+ * @param self the ball. */
+static void ball_random_direction (Ball* self)
+{
+    int8_t num = (timer_get () % RANDOM_DIRECTION_RANGE) - 1;
+    if (self->direction_vector == 0 && num == -1) {
+        self->direction_vector = 0;
+    } else if (self->direction_vector == NUM_DIRECTIONS - 1 && num == 1) {
+        self->direction_vector = NUM_DIRECTIONS - 1;
+    } else {
+        self->direction_vector += num;
+    }
+}
+
+
+
 /** Bounces the ball off the paddle.
  * @param self Address of the ball. */
 static void ball_bounce_paddle (Ball* self)
@@ -155,14 +172,7 @@ static void ball_bounce_paddle (Ball* self)
     // Reverses y_direction.
     self->y_direction = -self->y_direction;
 
-    int8_t num = (timer_get () % 3) - 1;
-    if (self->direction_vector == 0 && num == -1) {
-        self->direction_vector = 0;
-    } else if (self->direction_vector == NUM_DIRECTIONS - 1 && num == 1) {
-        self->direction_vector = NUM_DIRECTIONS - 1;
-    } else {
-        self->direction_vector += num;
-    }
+    ball_random_direction (self);
 
     // Updates the ball position such that it has bounced off the paddle.
     ball_update_position (self);
