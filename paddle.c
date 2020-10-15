@@ -6,8 +6,9 @@
 
 #include "pio.h"
 #include "navswitch.h"
-#include "paddle.h"
 #include "ledmat.h"
+
+#include "paddle.h"
 
 #define MIN_POSITION 0
 #define BOARD_WIDTH LEDMAT_ROWS_NUM

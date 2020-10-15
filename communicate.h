@@ -6,7 +6,9 @@
 
 #ifndef COMMUNICATE_H
 #define COMMUNICATE_H
+
 #include "system.h"
+
 #include "ball.h"
 
 typedef enum {
@@ -14,6 +16,9 @@ typedef enum {
     MESSAGE_BALL,
     MESSAGE_SCORE
 } Message_type;
+
+
+void communicate_init (void);
 
 
 /** Checks if player is ready to start, indicated by a push of the navswitch

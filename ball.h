@@ -7,7 +7,6 @@
 #ifndef BALL_H
 #define BALL_H
 
-#include "paddle.h"
 #include "system.h"
 
 #define SCALER 10

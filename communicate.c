@@ -4,9 +4,10 @@
     @brief  Send and receive.
 */
 
-#include "communicate.h"
 #include "ir_uart.h"
 #include "navswitch.h"
+
+#include "communicate.h"
 #include "ball.h"
 
 #define CONTROL_PATTERN BIT(7)
@@ -32,6 +33,11 @@
 #define SET_MASK(NUM,POS,MASK) ((NUM & MASK) << POS)
 
 
+
+void communicate_init (void)
+{
+    ir_uart_init ();
+}
 
 /** Checks if player is ready to start, indicated by a push of the navswitch
  * @return 1 if the navswitch has been pushed, otherwise 0 */

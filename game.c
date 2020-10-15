@@ -10,8 +10,7 @@
 #include "navswitch.h"
 #include "tinygl.h"
 #include "../fonts/font3x5_1.h"
-#include "led.h"
-#include "ir_uart.h"
+
 #include "paddle.h"
 #include "ball.h"
 #include "scoring.h"
@@ -42,7 +41,8 @@ void game_init (void)
     scoring_init();
     tinygl_setup ();
     navswitch_init ();
-    ir_uart_init ();
+    communicate_init ();
+    ledmat_init ();
     pacer_init (PACER_RATE);
 }
 

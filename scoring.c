@@ -6,7 +6,7 @@
 
 #include "tinygl.h"
 #include "pacer.h"
-#include "navswitch.h"
+
 #include "communicate.h"
 
 #define WIN_SCORE 3

@@ -4,14 +4,13 @@
     @brief  Ball object and methods.
 */
 
-#include "paddle.h"
-#include "system.h"
-#include "ball.h"
 #include "pio.h"
-#include "ir_uart.h"
+#include "timer.h"
 #include "ledmat.h"
 #include "pacer.h"
-#include "timer.h"
+
+#include "ball.h"
+#include "paddle.h"
 
 
 #define DEFAULT_Y_DIRECTION 1
@@ -206,9 +205,7 @@ void flash_ball (Ball* self)
 
         if (pacer_counter < FLASH_PERIOD / 2) {
             ball_update_display (self);
-        }
-
-        if (pacer_counter == FLASH_PERIOD) {
+        } else if (pacer_counter == FLASH_PERIOD) {
             flash_count++;
             pacer_counter = 0;
         }
