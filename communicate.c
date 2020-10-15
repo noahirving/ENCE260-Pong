@@ -10,8 +10,25 @@
 #include "ball.h"
 
 #define READY 'R'
+#define POSITION_X_POSITION 0
+#define POSITION_X_MASK 0b111
+
+
+#define DIRECTION_VECTOR_POSITION 3
+#define DIRECTION_VECTOR_MASK 0b111
+
+
+#define SPEED_INCREASED_POSITION 6
+#define SPEED_INCREASED_MASK 0b1
+
+
+
 #define GET_MASK(NUM,POS,MASK) ((NUM >> POS) & MASK)
 #define SET_MASK(NUM,POS,MASK) ((NUM & MASK) << POS)
+#define CONTROL_PATTERN BIT(7)
+
+#define IS_BALL(MESSAGE) ((~MESSAGE) & CONTROL_PATTERN)
+#define IS_SCORE(MESSAGE) (MESSAGE & CONTROL_PATTERN)
 
 
 /** Checks if player is ready to start, indicated by a push of the navswitch
@@ -51,9 +68,14 @@ void send_ball (Ball* self)
     invert_x_direction (self);
 
     // Encodes ball into char.
-    message |= SET_MASK (position_x, 0, 0b111);
-    message |= SET_MASK (self->direction_vector, 3, 0b111);
-    message |= SET_MASK (self->speed_increased, 6, 0b1);
+    message |= SET_MASK (position_x,
+                         POSITION_X_POSITION, POSITION_X_MASK);
+
+    message |= SET_MASK (self->direction_vector,
+                         DIRECTION_VECTOR_POSITION, DIRECTION_VECTOR_MASK);
+
+    message |= SET_MASK (self->speed_increased,
+                         SPEED_INCREASED_POSITION, SPEED_INCREASED_MASK);
 
     if (self->speed_increased) {
         self->speed_increased = false;
@@ -67,9 +89,14 @@ void send_ball (Ball* self)
  * @param message encoded ball. */
 void receive_ball (Ball *ball, char message)
 {
-    uint8_t position_x = GET_MASK (message, 0, 0b111);
-    uint8_t direction_vector = GET_MASK (message, 3, 0b111);
-    uint8_t speed_increased = GET_MASK (message, 6, 0b1);
+    uint8_t position_x = GET_MASK (message,
+                         POSITION_X_POSITION, POSITION_X_MASK);
+
+    uint8_t direction_vector = GET_MASK (message,
+                         DIRECTION_VECTOR_POSITION, DIRECTION_VECTOR_MASK);
+
+    uint8_t speed_increased = GET_MASK (message,
+                         SPEED_INCREASED_POSITION, SPEED_INCREASED_MASK);
 
     ball->position->x = position_x * SCALER;
     ball->position->y = MIN_Y * SCALER;
@@ -83,25 +110,6 @@ void receive_ball (Ball *ball, char message)
     }
 }
 
-
-/** Checks if a received message is score related by checking the largest bit (control bit)
- * @param message The received message
- * @return true if the control bit is 1, otherwise false */
-static bool is_score (char message)
-{
-    return message & BIT(7);
-}
-
-
-/** Returns if the message is an encoded ball.
- * @param message possible encoded ball. */
-static bool is_ball (char message)
-{
-    // Message is ball if 8th bit is '0'
-    return (~message) & BIT(7);
-}
-
-
 /** Gets the type of message passed through infra-red
  * @param message The message being sent
  * @return Message_type enum representing either a score, ball, or indicates if empty */
@@ -109,9 +117,9 @@ Message_type get_message (char* message)
 {
     if (ir_uart_read_ready_p ()) {
         *message = ir_uart_getc ();
-        if (is_ball (*message)) {
+        if (IS_BALL (*message)) {
             return MESSAGE_BALL;
-        } else if (is_score (*message)) {
+        } else if (IS_SCORE (*message)) {
             return MESSAGE_SCORE;
         }
     }
