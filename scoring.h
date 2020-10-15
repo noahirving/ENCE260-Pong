@@ -43,4 +43,4 @@ void end_game (void);
 
 
 
-#endif
+#endif // SCORING_H

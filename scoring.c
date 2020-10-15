@@ -17,7 +17,6 @@ static uint8_t opponent_score;
 
 
 
-/** Initiates the score for both players to 0 */
 void scoring_init (void)
 {
     your_score = 0;
@@ -26,8 +25,6 @@ void scoring_init (void)
 
 
 
-/** Increments opponent's score by 1 and notifies them that
- * the round is over */
 void lost_round (void)
 {
     opponent_score++;
@@ -36,7 +33,6 @@ void lost_round (void)
 
 
 
-/** Increments your score by 1 */
 void opponent_lost_round (void)
 {
     your_score++;
@@ -53,8 +49,6 @@ static bool opponent_won (void)
 
 
 
-/** Checks if the game is finished by seeing if the win score has been reached
- * @return 1 if the game has finsihed, otherwise 0 */
 bool game_finished (void)
 {
     return (your_score == WIN_SCORE || opponent_won ());
@@ -62,7 +56,6 @@ bool game_finished (void)
 
 
 
-/** Displays the score. */
 void display_score (void)
 {
     // Format of the score display. '#' is a placeholder for the score of each player.
@@ -82,7 +75,6 @@ void display_score (void)
 
 
 
-/** Checks who won the game and displays corresponding message */
 void end_game (void)
 {
     // Leading spaces in text for formatting.

@@ -45,6 +45,4 @@ uint8_t paddle_get_pattern (void);
 /** Updates the ledmat to display the paddle's current postition */
 void paddle_update_display (void);
 
-
-
-#endif
+#endif // PADDLE_H

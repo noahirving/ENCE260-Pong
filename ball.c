@@ -32,11 +32,6 @@ static const Vector directions[] = {
 
 
 
-/** Returns a new ball.
- * @param direction_vector index of the direction vector the ball will be using.
- * @param position pointer to the position of the ball
- * @param speed speed of the ball.
- * @return new Ball object*/
 Ball new_ball (uint8_t direction_vector, Vector* position, uint8_t speed)
 {
     // Scales the position of the ball.
@@ -51,8 +46,6 @@ Ball new_ball (uint8_t direction_vector, Vector* position, uint8_t speed)
 
 
 
-/** Inverts the x direction of the ball.
- * @param self Address of the ball. */
 void invert_x_direction (Ball* self)
 {
     self->direction_vector = (NUM_DIRECTIONS - 1) - self->direction_vector;
@@ -60,9 +53,6 @@ void invert_x_direction (Ball* self)
 
 
 
-/** Gets the position Vector of the ball
- * @param self Address of the ball
- * @return position vector of the ball */
 Vector ball_get_position (Ball* self)
 {
     Vector position = {self->position->x / SCALER, self->position->y / SCALER};
@@ -211,8 +201,6 @@ static void ball_increase_speed (Ball* ball)
 
 
 
-/** Flashes the ball on and off at its current position
- * @param self Address of the ball object */
 void flash_ball (Ball* self)
 {
     uint16_t pacer_counter = 0;
@@ -234,8 +222,6 @@ void flash_ball (Ball* self)
 
 
 
-/** Updates the ledmat to display the ball's current postition
- * @param self Address to the ball object */
 void ball_update_display (Ball* self)
 {
     ledmat_display_column (ball_get_pattern(self), ball_get_position(self).y);
@@ -243,9 +229,6 @@ void ball_update_display (Ball* self)
 
 
 
-/** Updates the ball.
- * @param ball the ball
- * @return the state of the ball. */
 Ball_state ball_update (Ball* ball)
 {
     Ball_state state = BALL_NORMAL;

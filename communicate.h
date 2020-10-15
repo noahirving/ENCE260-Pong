@@ -65,4 +65,4 @@ void receive_ball (Ball* ball, char message);
 Message_type get_message (char* message);
 
 
-#endif
+#endif // COMMUNICATE_H

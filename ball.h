@@ -28,6 +28,7 @@ typedef enum {
     BALL_SEND
 } Ball_state;
 
+
 /* Structure of a Vector. */
 typedef struct {
     int8_t x;
@@ -53,6 +54,7 @@ typedef struct {
 Ball_state ball_update (Ball* ball);
 
 
+
 /** Returns a new ball.
  * @param direction_vector index of the direction vector the ball will be using.
  * @param position pointer to the position of the ball
@@ -61,9 +63,11 @@ Ball_state ball_update (Ball* ball);
 Ball new_ball(uint8_t direction_vector, Vector* position, uint8_t speed);
 
 
+
 /** Updates the ledmat to display the ball's current postition
  * @param self Address to the ball object */
 void ball_update_display (Ball* self);
+
 
 
 /** Flashes the ball on and off at its current position
@@ -71,9 +75,11 @@ void ball_update_display (Ball* self);
 void flash_ball (Ball* self);
 
 
+
 /** Inverts the x direction of the ball.
  * @param self Address of the ball. */
 void invert_x_direction (Ball* self);
+
 
 
 /** Gets the position Vector of the ball
