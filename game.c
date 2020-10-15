@@ -20,6 +20,8 @@
 #define COUNTDOWN_TIMER_RATE 500
 #define MESSAGE_RATE 20
 #define COUNTDOWN_POSITION {0, 4}
+#define COUNTDOWN_START '3'
+#define COUNTDOWN_END '0'
 
 // Global variable defining who will start each round
 bool starting_player = false;
@@ -85,12 +87,12 @@ void connect (void)
 void countdown (void)
 {
     uint16_t pacer_counter = 0;
-    char counter[] = {'3', '\0'};
+    char counter[] = {COUNTDOWN_START, '\0'};
 
     tinygl_text_mode_set (TINYGL_TEXT_MODE_STEP);
     tinygl_clear ();
 
-    while (counter[0] >= '0') {
+    while (counter[0] >= COUNTDOWN_END) {
         tinygl_update ();
         pacer_wait ();
         pacer_counter++;
@@ -176,23 +178,21 @@ void play_round (void)
             if (ball_on_screen) {
                 ball_update_display (&my_ball);
             }
-        }
-
-
-
-        char message = 0;
-        Message_type type = get_message (&message);
-        if (type == MESSAGE_BALL) {
-            // Ball has reached edge of opponent's screen and transferred it over
-            if (message & BIT(6)) { //Ball speed increased on opponent's screen
-                ball_hit_counter = 0;
+        } else {
+            char message = 0;
+            Message_type type = get_message (&message);
+            if (type == MESSAGE_BALL) {
+                // Ball has reached edge of opponent's screen and transferred it over
+                if (message & BIT(6)) { //Ball speed increased on opponent's screen
+                    ball_hit_counter = 0;
+                }
+                receive_ball (&my_ball, message);
+                ball_on_screen = true;
+            } else if (type == MESSAGE_SCORE) {
+                starting_player = false;
+                opponent_lost_round ();
+                round_running = false;
             }
-            receive_ball (&my_ball, message);
-            ball_on_screen = true;
-        } else if (type == MESSAGE_SCORE) {
-            starting_player = false;
-            opponent_lost_round ();
-            round_running = false;
         }
 
         ball_counter++;
