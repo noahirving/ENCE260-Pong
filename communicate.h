@@ -27,9 +27,11 @@ bool is_ready (void);
 bool opponent_ready (void);
 
 
-/** Sends the ready character to the opponent */
+/** Sends the READY character to the opponent. */
 void send_ready (void);
 
+/** Sends the LOST character to the opponent. */
+void send_lost (void);
 
 /** Transfers the ball to the opponent's screen.
  * @param self Address of the ball. */

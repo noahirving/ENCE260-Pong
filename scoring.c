@@ -4,15 +4,13 @@
     @brief  Game scoring and win conditions.
 */
 
-#include "system.h"
 #include "tinygl.h"
 #include "pacer.h"
-#include "ir_uart.h"
 #include "navswitch.h"
+#include "communicate.h"
 
 #define WIN_SCORE 3
 #define SCORE_DISPLAY_TIMER 1750
-#define LOST (1 << 7)
 
 static uint8_t your_score;
 static uint8_t opponent_score;
@@ -32,7 +30,7 @@ void scoring_init (void)
 void lost_round (void)
 {
     opponent_score++;
-    ir_uart_putc (LOST);
+    send_lost ();
 }
 
 

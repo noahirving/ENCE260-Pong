@@ -9,7 +9,14 @@
 #include "navswitch.h"
 #include "ball.h"
 
+#define CONTROL_PATTERN BIT(7)
+
+#define IS_BALL(MESSAGE) ((~MESSAGE) & CONTROL_PATTERN)
+#define IS_SCORE(MESSAGE) (MESSAGE & CONTROL_PATTERN)
+
 #define READY 'R'
+#define LOST CONTROL_PATTERN
+
 #define POSITION_X_POSITION 0
 #define POSITION_X_MASK 0b111
 
@@ -21,14 +28,9 @@
 #define SPEED_INCREASED_POSITION 6
 #define SPEED_INCREASED_MASK 0b1
 
-
-
 #define GET_MASK(NUM,POS,MASK) ((NUM >> POS) & MASK)
 #define SET_MASK(NUM,POS,MASK) ((NUM & MASK) << POS)
-#define CONTROL_PATTERN BIT(7)
 
-#define IS_BALL(MESSAGE) ((~MESSAGE) & CONTROL_PATTERN)
-#define IS_SCORE(MESSAGE) (MESSAGE & CONTROL_PATTERN)
 
 
 /** Checks if player is ready to start, indicated by a push of the navswitch
@@ -40,6 +42,7 @@ bool is_ready (void)
 }
 
 
+
 /** Checks if opponent is ready to start indicated by the reception
  * of a 'Ready' indicator
  * @return 1 if the opponent has indicated ready, otherwise 0 */
@@ -49,11 +52,21 @@ bool opponent_ready (void)
 }
 
 
-/** Sends the ready character to the opponent */
+
+/** Sends the READY character to the opponent. */
 void send_ready (void)
 {
     ir_uart_putc(READY);
 }
+
+
+
+/** Sends the LOST character to the opponent. */
+void send_lost (void)
+{
+    ir_uart_putc(LOST);
+}
+
 
 
 /** Transfers the ball to the opponent's screen.
@@ -84,6 +97,8 @@ void send_ball (Ball* self)
     ir_uart_putc (message); // Transfer ball position and vector as single character
 }
 
+
+
 /** Receives the ball from the opponent's screen.
  * @param ball the ball to set
  * @param message encoded ball. */
@@ -109,6 +124,8 @@ void receive_ball (Ball *ball, char message)
         ball->speed_increased = false;
     }
 }
+
+
 
 /** Gets the type of message passed through infra-red
  * @param message The message being sent
