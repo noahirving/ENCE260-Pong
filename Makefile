@@ -28,7 +28,7 @@ scoring.o: scoring.c scoring.h $(AVR_PATH)system.h $(UTILS_PATH)tinygl.h $(UTILS
 paddle.o: paddle.c paddle.h communicate.h $(AVR_PATH)system.h $(AVR_PATH)pio.h $(DRIVER_PATH)navswitch.h $(DRIVER_PATH)ledmat.h
 	$(CC) -c $(CFLAGS) $< -o $@
 
-ball.o: ball.c ball.h paddle.h $(AVR_PATH)system.h $(AVR_PATH)timer.h $(DRIVER_PATH)ledmat.h $(UTILS_PATH)pacer.h
+ball.o: ball.c ball.h paddle.h scoring.h $(AVR_PATH)system.h $(AVR_PATH)timer.h $(DRIVER_PATH)ledmat.h $(UTILS_PATH)pacer.h
 	$(CC) -c $(CFLAGS) $< -o $@
 
 communicate.o: communicate.c communicate.h ball.h $(AVR_PATH)system.h $(AVR_PATH)ir_uart.h $(AVR_PATH)system.h $(DRIVER_PATH)navswitch.h

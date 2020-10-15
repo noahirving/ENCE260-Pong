@@ -11,6 +11,7 @@
 
 #include "ball.h"
 #include "paddle.h"
+#include "scoring.h"
 
 
 #define DEFAULT_Y_DIRECTION 1
@@ -28,6 +29,7 @@ static const Vector directions[] = {
     {2, 2},
     {2, 1}
 };
+
 
 
 /** Returns a new ball.
@@ -48,6 +50,7 @@ Ball new_ball (uint8_t direction_vector, Vector* position, uint8_t speed)
 }
 
 
+
 /** Inverts the x direction of the ball.
  * @param self Address of the ball. */
 void invert_x_direction (Ball* self)
@@ -55,15 +58,6 @@ void invert_x_direction (Ball* self)
     self->direction_vector = (NUM_DIRECTIONS - 1) - self->direction_vector;
 }
 
-
-/** Returns true if the ball is transferable.
- * @param self Address of the ball.
- * @return true if the ball can be transferred, otherwise false */
-bool ball_is_transferable (Ball* self)
-{
-    // If the ball is beyond the bottom of the grid and its y direction is down.
-    return ball_get_position(self).y  < MIN_Y && self->y_direction < 0;
-}
 
 
 /** Gets the position Vector of the ball
@@ -76,14 +70,27 @@ Vector ball_get_position (Ball* self)
 }
 
 
+
+/** Returns true if the ball is sendable.
+ * @param self Address of the ball.
+ * @return true if the ball can be transferred, otherwise false */
+static bool ball_is_sendable (Ball* self)
+{
+    // If the ball is beyond the bottom of the grid and its y direction is down.
+    return ball_get_position(self).y  < MIN_Y && self->y_direction < 0;
+}
+
+
+
 /** Returns if the ball can collide with the paddle.
  * @param self Address of the ball.
  * @return true if the ball is can hit the paddle (i.e. ball is in the bottom row), othwerwise false */
-bool can_collide (Ball* self)
+static bool can_collide (Ball* self)
 {
     // If the ball has the same y position as the paddle.
     return ball_get_position(self).y >= MAX_Y; // TODO; Change to paddle position
 }
+
 
 
 /** Gets the position of the ball as a bit pattern.
@@ -95,15 +102,17 @@ static uint8_t ball_get_pattern (Ball* self)
 }
 
 
+
 /** Returns if the ball is colliding with the paddle.
  * @param self Address of the ball
  * @param paddle_pattern Bit pattern representing the paddle
  * @return true if the ball is colliding with the paddle, otherwise false */
-bool is_colliding (Ball* self,  uint8_t paddle_pattern)
+static bool is_colliding (Ball* self,  uint8_t paddle_pattern)
 {
     // If the ball's pattern and paddle's pattern cross.
     return ball_get_pattern(self) & paddle_pattern;
 }
+
 
 
 /** Gets the ball's direction vector.
@@ -120,16 +129,38 @@ static Vector ball_get_direction (Ball* self)
 }
 
 
+
+/** Updates the balls position.
+ * @param self Address of the ball. */
+static void ball_update_position (Ball* self)
+{
+    Vector direction = ball_get_direction (self);
+    self->position->x += direction.x * self->speed;
+    self->position->y += direction.y * self->speed;
+}
+
+
+
+/** Reverts the given ball back to its previous position with the given direction.
+ * @param ball the ball
+ * @param direction the direction to move back. */
+static void ball_revert_position (Ball* ball, Vector* direction)
+{
+    ball->position->x -= direction->x * ball->speed;
+    ball->position->y -= direction->y * ball->speed;
+}
+
+
+
 /** Bounces the ball off the paddle.
  * @param self Address of the ball. */
-void ball_bounce_paddle (Ball* self)
+static void ball_bounce_paddle (Ball* self)
 {
     Vector direction = ball_get_direction (self);
 
     /* Returns ball to position before collision with paddle,
      * so that it does no phase through paddle when colliding. */
-    self->position->x -= direction.x * self->speed;
-    self->position->y -= direction.y * self->speed;
+    ball_revert_position (self, &direction);
 
     // Reverses y_direction.
     self->y_direction = -self->y_direction;
@@ -150,47 +181,34 @@ void ball_bounce_paddle (Ball* self)
 
 /** Bounces ball off wall if on wall.
  * @param self Address of the ball. */
-void ball_bounce_wall (Ball* self)
+static void ball_bounce_wall (Ball* self)
 {
     Vector position = ball_get_position(self);
     // If on walls or beyond walls, sets position to wall and inverts x direction.
     if (position.x < MIN_X || position.x > MAX_X) {
         Vector direction = ball_get_direction (self);
-        self->position->x -= direction.x * self->speed;
-        self->position->y -= direction.y * self->speed;
+        ball_revert_position (self, &direction);
         invert_x_direction (self);
         ball_update_position (self);
     }
 }
 
 
-/** Updates the balls position.
- * @param self Address of the ball. */
-void ball_update_position (Ball* self)
-{
-    Vector direction = ball_get_direction (self);
-    self->position->x += direction.x * self->speed;
-    self->position->y += direction.y * self->speed;
-}
-
-
-/** Updates the ledmat to display the ball's current postition
- * @param self Address to the ball object */
-void ball_update_display (Ball* self)
-{
-    ledmat_display_column (ball_get_pattern(self), ball_get_position(self).y);
-}
-
 
 /** Increases the ball's speed up until the max defined speed
  * @param self Address to the bal object */
-void ball_increase_speed (Ball* self)
+static void ball_increase_speed (Ball* ball)
 {
-    if (self->speed < BALL_MAX_SPEED) {
-        self->speed++;
-        self->speed_increased = true;
+
+    if (ball->hit_counter >= BALL_SPEED_INC_PERIOD) {
+        if (ball->speed < BALL_MAX_SPEED) {
+            ball->speed++;
+            ball->speed_increased = true;
+        }
+        ball->hit_counter = 0;
     }
 }
+
 
 
 /** Flashes the ball on and off at its current position
@@ -212,4 +230,42 @@ void flash_ball (Ball* self)
         }
         pacer_counter++;
     }
+}
+
+
+
+/** Updates the ledmat to display the ball's current postition
+ * @param self Address to the ball object */
+void ball_update_display (Ball* self)
+{
+    ledmat_display_column (ball_get_pattern(self), ball_get_position(self).y);
+}
+
+
+
+/** Updates the ball.
+ * @param ball the ball
+ * @return the state of the ball. */
+Ball_state ball_update (Ball* ball)
+{
+    Ball_state state = BALL_NORMAL;
+
+    if (ball->active) {
+        ball_update_position (ball);
+        ball_bounce_wall (ball);
+
+        if (can_collide (ball)) { //Ball is in the row with the paddle
+            if (is_colliding (ball, paddle_get_pattern ())) { //Ball has hit the paddle and bounced off
+                ball_bounce_paddle (ball);
+                ball->hit_counter++;
+                ball_increase_speed (ball);
+            }
+            else { //Ball has missed the paddle so the round is lost
+                state = BALL_MISSED;
+            }
+        } else if (ball_is_sendable (ball)) { // Ball is on the display boundary
+            state = BALL_SEND;
+        }
+    }
+    return state;
 }

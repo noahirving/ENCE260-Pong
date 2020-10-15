@@ -119,15 +119,16 @@ void play_round (void)
     bool round_running = true;
     uint16_t ball_counter = 0;
     Vector position = DEFAULT_BALL_POSITION;
-    Ball my_ball = new_ball (DEFAULT_BALL_DIRECTION, &position, BALL_MIN_SPEED);
+    Ball ball = new_ball (DEFAULT_BALL_DIRECTION, &position, BALL_MIN_SPEED);
 
     countdown ();
     paddle_init (PADDLE_LENGTH);
 
     // Only display ball for the player who is starting
     if (starting_player) {
-        my_ball.active = true;
+        ball.active = true;
     }
+
     // Begin Round
     while (round_running) {
         pacer_wait ();
@@ -137,47 +138,28 @@ void play_round (void)
         pacer_wait (); // Second pacer wait allows display to switch between dislaying the paddle and the ball
 
         // Only performs update for the player who has the ball on their screen
-        if (my_ball.active) {
-            if (ball_counter >= BALL_UPDATE_PERIOD) {
-                ball_counter = 0;
-                ball_update_position (&my_ball);
-                ball_bounce_wall (&my_ball);
 
-                if (can_collide (&my_ball)) { //Ball is in the row with the paddle
-                    if (is_colliding (&my_ball, paddle_get_pattern ())) { //Ball has hit the paddle and bounced off
-
-                        ball_bounce_paddle (&my_ball);
-                        my_ball.hit_counter++;
-                    }
-                    else { //Ball has missed the paddle so the round is lost
-                        flash_ball (&my_ball);
-                        round_running = false;
-                        starting_player = true;
-                        lost_round ();
-                    }
-                }
-
-
-
-                if (my_ball.hit_counter >= BALL_SPEED_INC_PERIOD) {
-                    ball_increase_speed (&my_ball);
-                    my_ball.hit_counter = 0;
-                }
-
-                if (ball_is_transferable (&my_ball)) { // Ball is on the display boundary
-                    send_ball (&my_ball);
-                }
-
+        if (ball_counter >= BALL_UPDATE_PERIOD) {
+            ball_counter = 0;
+            Ball_state state = ball_update (&ball);
+            if (state == BALL_MISSED) {
+                flash_ball (&ball);
+                round_running = false;
+                starting_player = true;
+                lost_round ();
+            } else if (state == BALL_SEND) {
+                send_ball (&ball);
             }
-            if (my_ball.active) {
-                ball_update_display (&my_ball);
-            }
+        }
+
+        if (ball.active) {
+            ball_update_display (&ball);
         } else {
             char message = 0;
             Message_type type = get_message (&message);
             if (type == MESSAGE_BALL) {
                 // Ball has reached edge of opponent's screen and transferred it over
-                receive_ball (&my_ball, message);
+                receive_ball (&ball, message);
             } else if (type == MESSAGE_SCORE) {
                 starting_player = false;
                 opponent_lost_round ();

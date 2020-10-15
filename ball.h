@@ -21,6 +21,13 @@
 #define BALL_SPEED_INC_PERIOD 3
 #define BALL_UPDATE_PERIOD 40
 
+/* Enumerator of ball states. */
+typedef enum {
+    BALL_NORMAL,
+    BALL_MISSED,
+    BALL_SEND
+} Ball_state;
+
 /* Structure of a Vector. */
 typedef struct {
     int8_t x;
@@ -40,51 +47,18 @@ typedef struct {
 } Ball;
 
 
+/** Updates the ball.
+ * @param ball the ball
+ * @return the state of the ball. */
+Ball_state ball_update (Ball* ball);
+
+
 /** Returns a new ball.
  * @param direction_vector index of the direction vector the ball will be using.
  * @param position pointer to the position of the ball
  * @param speed speed of the ball.
  * @return new Ball object*/
 Ball new_ball(uint8_t direction_vector, Vector* position, uint8_t speed);
-
-
-/** Returns if the ball can collide with the paddle.
- * @param self Address of the ball.
- * @return true if the ball is can hit the paddle (i.e. ball is in the bottom row), othwerwise false */
-bool can_collide (Ball* self);
-
-
-/** Returns if the ball is colliding with the paddle.
- * @param self Address of the ball
- * @param paddle_pattern Bit pattern representing the paddle
- * @return true if the ball is colliding with the paddle, otherwise false */
-bool is_colliding (Ball* self,  uint8_t paddle_bitmap);
-
-
-/** Bounces the ball off the paddle.
- * @param self Address of the ball. */
-void ball_bounce_paddle (Ball* self);
-
-
-/** Bounces ball off wall if on wall.
- * @param self Address of the ball. */
-void ball_bounce_wall (Ball* self);
-
-
-/** Updates the balls position.
- * @param self Address of the ball. */
-void ball_update_position (Ball* self);
-
-
-/** Returns true if the ball is transferable.
- * @param self Address of the ball.
- * @return true if the ball can be transferred, otherwise false */
-bool ball_is_transferable (Ball* self);
-
-
-/** Increases the ball's speed up until the max defined speed
- * @param self Address to the bal object */
-void ball_increase_speed (Ball* self);
 
 
 /** Updates the ledmat to display the ball's current postition
@@ -107,4 +81,4 @@ void invert_x_direction (Ball* self);
  * @return position vector of the ball */
 Vector ball_get_position (Ball* self);
 
-#endif
+#endif // BALL_H

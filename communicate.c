@@ -128,7 +128,7 @@ void receive_ball (Ball *ball, char message)
     ball->direction_vector = direction_vector;
 
     if (speed_increased) {
-        ball_increase_speed (ball);
+        ball->speed++;
         ball->speed_increased = false;
         ball->hit_counter = 0;
     }
