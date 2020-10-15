@@ -19,6 +19,7 @@
 #define PACER_RATE 500
 #define COUNTDOWN_TIMER_RATE 500
 #define MESSAGE_RATE 20
+#define COUNTDOWN_POSITION {0, 4}
 
 // Global variable defining who will start each round
 bool starting_player = false;
@@ -103,8 +104,8 @@ void countdown (void)
         if (counter[0] == '0') {
             tinygl_text ("GO");
         } else {
-            tinygl_point_t pos = {0, 4}; // Position of character is set to the middle of the rotated ledmat
-            tinygl_draw_message (counter, pos, 1);
+            tinygl_point_t position = COUNTDOWN_POSITION; // Position of character is set to the middle of the rotated ledmat
+            tinygl_draw_message (counter, position, 1);
         }
     }
 }
@@ -194,7 +195,7 @@ void play_round (void)
             round_running = false;
         }
 
-        ball_counter ++;
+        ball_counter++;
     }
 }
 
