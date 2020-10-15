@@ -26,6 +26,7 @@ void scoring_init (void)
 }
 
 
+
 /** Increments opponent's score by 1 and notifies them that
  * the round is over */
 void lost_round (void)
@@ -35,35 +36,13 @@ void lost_round (void)
 }
 
 
+
 /** Increments your score by 1 */
 void opponent_lost_round (void)
 {
     your_score++;
 }
 
-
-/** Gets your score
- * @return your score */
-static uint8_t get_your_score (void)
-{
-    return your_score;
-}
-
-
-/** Gets your opponent's score
- * @return your opponent's score */
-static uint8_t get_opponent_score (void)
-{
-    return opponent_score;
-}
-
-
-/** Checks if the game is finished by seeing if the win score has been reached
- * @return 1 if the game has finsihed, otherwise 0 */
-bool game_finished (void)
-{
-    return (your_score == WIN_SCORE || opponent_score == WIN_SCORE);
-}
 
 
 /** Checks if your opponent has won the game
@@ -74,41 +53,45 @@ static bool opponent_won (void)
 }
 
 
-/** Displays the score after the round has ended */
+
+/** Checks if the game is finished by seeing if the win score has been reached
+ * @return 1 if the game has finsihed, otherwise 0 */
+bool game_finished (void)
+{
+    return (your_score == WIN_SCORE || opponent_won ());
+}
+
+
+
+/** Displays the score. */
 void display_score (void)
 {
-    /* Format of the score display. '#' is a placeholder for the score of each player */
-    char score[] = {' ', ' ', '#', '-', '#', ' ', ' '};
-    score[2] = get_your_score () + '0';
-    score[4] = get_opponent_score () + '0';
+    // Format of the score display. '#' is a placeholder for the score of each player.
+    char score[] = "  #-#  ";
+    // Adds scores to score string in correct char range.
+    score[2] = your_score + '0';
+    score[4] = opponent_score + '0';
 
+    // Displays the score.
     tinygl_text_mode_set (TINYGL_TEXT_MODE_SCROLL);
     tinygl_clear ();
     tinygl_text (score);
 
-    uint16_t pacer_count = 0;
-
-    while (pacer_count < SCORE_DISPLAY_TIMER) {
+    for (uint16_t counter = 0; counter < SCORE_DISPLAY_TIMER; counter++) {
         pacer_wait ();
         tinygl_update ();
-        pacer_count++;
     }
 }
+
 
 
 /** Checks who won the game and displays corresponding message */
 void end_game (void)
 {
-    /* Leading spaces in text for formatting */
+    // Leading spaces in text for formatting.
     if (opponent_won ()) {
         tinygl_text ("  LOSER");
     } else {
         tinygl_text ("  WINNER");
-    }
-
-    while (!navswitch_push_event_p (NAVSWITCH_PUSH)) {
-        pacer_wait ();
-        navswitch_update ();
-        tinygl_update ();
     }
 }

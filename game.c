@@ -212,5 +212,6 @@ int main (void)
         }
 
         end_game ();
+        wait_for (is_ready);
     }
 }
