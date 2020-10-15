@@ -1,8 +1,8 @@
 Pong README
 
 To load the game onto the UC Fun Kit 4:
-    1. Using a terminal, go into the directory holding all the game modules and the Makefile
-    2. Enter 'make program' into the terminal for each of the to boards
+    1. Using a terminal, go into the directory holding all the game modules and the Makefile.
+    2. Enter 'make program' into the terminal for each of the two boards.
 
 
 Starting the Game:
@@ -10,7 +10,7 @@ Starting the Game:
     
     1. Make sure both players have loaded the game before continuing.
     2. Press the navswitch down. If you pushed ready up before your opponent,
-       you will have to wait for them before the game starts.
+       you will have to wait for them before the game starts and "WAITING FOR OPPONENT" will be shown.
     
     NOTE: Please ensure that both players do not ready up at the same time, half a second will be plenty of time to wait.
 
