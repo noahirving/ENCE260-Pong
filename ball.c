@@ -42,7 +42,7 @@ Ball new_ball (uint8_t direction_vector, Vector* position, uint8_t speed)
     position->y = position->y * SCALER;
 
     // Creates a ball with the given params and a default y_direction of one and speed_increase = false
-    Ball ball = {direction_vector, DEFAULT_Y_DIRECTION, position, speed, false, 0};
+    Ball ball = {direction_vector, DEFAULT_Y_DIRECTION, position, speed, false, 0, false};
 
     return ball;
 }

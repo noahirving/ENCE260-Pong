@@ -76,31 +76,33 @@ void send_lost (void)
 
 
 /** Transfers the ball to the opponent's screen.
- * @param self Address of the ball. */
-void send_ball (Ball* self)
+ * @param ball Address of the ball. */
+void send_ball (Ball* ball)
 {
     char message = 0;
     // Inverts x position.*/
-    uint8_t position_x = MAX_X - ball_get_position (self).x;
+    uint8_t position_x = MAX_X - ball_get_position (ball).x;
 
     // Inverts direction for mirrored receiver
-    invert_x_direction (self);
+    invert_x_direction (ball);
 
     // Encodes ball into char.
     message |= SET_MASK (position_x,
                          POSITION_X_POSITION, POSITION_X_MASK);
 
-    message |= SET_MASK (self->direction_vector,
+    message |= SET_MASK (ball->direction_vector,
                          DIRECTION_VECTOR_POSITION, DIRECTION_VECTOR_MASK);
 
-    message |= SET_MASK (self->speed_increased,
+    message |= SET_MASK (ball->speed_increased,
                          SPEED_INCREASED_POSITION, SPEED_INCREASED_MASK);
 
-    if (self->speed_increased) {
-        self->speed_increased = false;
+    if (ball->speed_increased) {
+        ball->speed_increased = false;
     }
 
     ir_uart_putc (message); // Transfer ball position and vector as single character
+
+    ball->active = false;
 }
 
 
@@ -130,6 +132,8 @@ void receive_ball (Ball *ball, char message)
         ball->speed_increased = false;
         ball->hit_counter = 0;
     }
+
+    ball->active = true;
 }
 
 

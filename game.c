@@ -117,20 +117,17 @@ void countdown (void)
 void play_round (void)
 {
     bool round_running = true;
-    bool ball_on_screen = false;
-
-    // Only display ball for the player who is starting
-    if (starting_player) {
-        ball_on_screen = true;
-    }
-
-    countdown ();
-    paddle_init (PADDLE_LENGTH);
-
     uint16_t ball_counter = 0;
     Vector position = DEFAULT_BALL_POSITION;
     Ball my_ball = new_ball (DEFAULT_BALL_DIRECTION, &position, BALL_MIN_SPEED);
 
+    countdown ();
+    paddle_init (PADDLE_LENGTH);
+
+    // Only display ball for the player who is starting
+    if (starting_player) {
+        my_ball.active = true;
+    }
     // Begin Round
     while (round_running) {
         pacer_wait ();
@@ -140,7 +137,7 @@ void play_round (void)
         pacer_wait (); // Second pacer wait allows display to switch between dislaying the paddle and the ball
 
         // Only performs update for the player who has the ball on their screen
-        if (ball_on_screen) {
+        if (my_ball.active) {
             if (ball_counter >= BALL_UPDATE_PERIOD) {
                 ball_counter = 0;
                 ball_update_position (&my_ball);
@@ -155,7 +152,6 @@ void play_round (void)
                     else { //Ball has missed the paddle so the round is lost
                         flash_ball (&my_ball);
                         round_running = false;
-                        ball_on_screen = false;
                         starting_player = true;
                         lost_round ();
                     }
@@ -170,11 +166,10 @@ void play_round (void)
 
                 if (ball_is_transferable (&my_ball)) { // Ball is on the display boundary
                     send_ball (&my_ball);
-                    ball_on_screen = false;
                 }
 
             }
-            if (ball_on_screen) {
+            if (my_ball.active) {
                 ball_update_display (&my_ball);
             }
         } else {
@@ -183,7 +178,6 @@ void play_round (void)
             if (type == MESSAGE_BALL) {
                 // Ball has reached edge of opponent's screen and transferred it over
                 receive_ball (&my_ball, message);
-                ball_on_screen = true;
             } else if (type == MESSAGE_SCORE) {
                 starting_player = false;
                 opponent_lost_round ();

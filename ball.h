@@ -36,6 +36,7 @@ typedef struct {
     uint8_t speed;
     bool speed_increased;
     uint8_t hit_counter;
+    bool active;
 } Ball;
 
 
