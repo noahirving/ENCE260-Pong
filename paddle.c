@@ -34,6 +34,7 @@ static void paddle_shift_left (void)
 }
 
 
+
 /** Shifts the paddle position to the right if it does not move
     beyond the min position. */
 static void paddle_shift_right (void)
@@ -44,6 +45,7 @@ static void paddle_shift_right (void)
 }
 
 
+
 /** Initializes the paddle.
  * @param new_length length of the paddle */
 void paddle_init (uint8_t new_length)
@@ -51,22 +53,18 @@ void paddle_init (uint8_t new_length)
     paddle_set_length (new_length);
     paddle_set_period (DEFAULT_PADDLE_PERIOD);
 
-    /* Sets the paddle position to the center. */
+    // Sets the paddle position to the center.
     paddle_position = (BOARD_WIDTH / 2) - (paddle_length / 2) + MIN_POSITION;
 }
+
 
 
 /** Updates the paddles position when the navswitch is pushed. */
 void paddle_update (void)
 {
     navswitch_update ();
-    /* If the counter has reached the period.
-     * Else the counter is incremented. */
+
     if (paddle_counter >= move_period) {
-        /* If the navwitch is pushed down left the paddle is
-           moved left and the counter is reset.
-         * Else if the paddle is pushed down right the paddle is
-           moved right and the counter is reset */
         if (navswitch_down_p (LEFT)) {
             paddle_shift_left ();
             paddle_counter = 0;
@@ -78,6 +76,7 @@ void paddle_update (void)
         paddle_counter++;
     }
 }
+
 
 
 /** Gets the paddle as a single row bitmap.
@@ -92,22 +91,20 @@ uint8_t paddle_get_pattern (void)
 }
 
 
+
 /** Changes the length of the paddle.
  * @param new length of paddle. */
 void paddle_set_length (uint8_t new_length)
 {
-    /* Sets the new max position. */
     max_position = MIN_POSITION + BOARD_WIDTH - new_length;
 
-    /* If the current position of the paddle is more than the new
-       max position, sets the position back to the max position. */
-    if (max_position > paddle_position) {
+    if (paddle_position > max_position) {
         paddle_position = max_position;
     }
 
-    /* Sets the new max length. */
     paddle_length = new_length;
 }
+
 
 
 /** Sets the period of the paddle movement.
@@ -118,10 +115,9 @@ void paddle_set_period (uint16_t period)
 }
 
 
+
 /** Updates the ledmat to display the paddle's current postition */
 void paddle_update_display (void)
 {
     ledmat_display_column (paddle_get_pattern(), 4);
 }
-
-

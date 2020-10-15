@@ -16,6 +16,7 @@ static uint8_t your_score;
 static uint8_t opponent_score;
 
 
+
 /** Initiates the score for both players to 0 */
 void scoring_init (void)
 {
@@ -66,11 +67,9 @@ void display_score (void)
 {
     // Format of the score display. '#' is a placeholder for the score of each player.
     char score[] = "  #-#  ";
-    // Adds scores to score string in correct char range.
     score[2] = your_score + '0';
     score[4] = opponent_score + '0';
 
-    // Displays the score.
     tinygl_text_mode_set (TINYGL_TEXT_MODE_SCROLL);
     tinygl_clear ();
     tinygl_text (score);

@@ -10,8 +10,10 @@
 #include "system.h"
 
 
+
 /** Initiates the score for both players to 0 */
 void scoring_init (void);
+
 
 
 /** Increments opponent's score by 1 and notifies them that
@@ -19,8 +21,10 @@ void scoring_init (void);
 void lost_round (void);
 
 
+
 /** Increments your score by 1 */
 void opponent_lost_round (void);
+
 
 
 /** Checks if the game is finished by seeing if the win score has been reached
@@ -28,11 +32,15 @@ void opponent_lost_round (void);
 bool game_finished (void);
 
 
+
 /** Displays the score after the round has ended */
 void display_score (void);
 
 
+
 /** Checks who won the game and displays corresponding message */
 void end_game (void);
+
+
 
 #endif
