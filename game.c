@@ -118,7 +118,6 @@ void play_round (void)
 {
     bool round_running = true;
     bool ball_on_screen = false;
-    uint8_t ball_hit_counter = 0;
 
     // Only display ball for the player who is starting
     if (starting_player) {
@@ -151,7 +150,7 @@ void play_round (void)
                     if (is_colliding (&my_ball, paddle_get_pattern ())) { //Ball has hit the paddle and bounced off
 
                         ball_bounce_paddle (&my_ball);
-                        ball_hit_counter++;
+                        my_ball.hit_counter++;
                     }
                     else { //Ball has missed the paddle so the round is lost
                         flash_ball (&my_ball);
@@ -164,9 +163,9 @@ void play_round (void)
 
 
 
-                if (ball_hit_counter >= BALL_SPEED_INC_PERIOD) {
+                if (my_ball.hit_counter >= BALL_SPEED_INC_PERIOD) {
                     ball_increase_speed (&my_ball);
-                    ball_hit_counter = 0;
+                    my_ball.hit_counter = 0;
                 }
 
                 if (ball_is_transferable (&my_ball)) { // Ball is on the display boundary
@@ -183,9 +182,6 @@ void play_round (void)
             Message_type type = get_message (&message);
             if (type == MESSAGE_BALL) {
                 // Ball has reached edge of opponent's screen and transferred it over
-                if (message & BIT(6)) { //Ball speed increased on opponent's screen
-                    ball_hit_counter = 0;
-                }
                 receive_ball (&my_ball, message);
                 ball_on_screen = true;
             } else if (type == MESSAGE_SCORE) {

@@ -35,6 +35,7 @@ typedef struct {
     Vector *position;
     uint8_t speed;
     bool speed_increased;
+    uint8_t hit_counter;
 } Ball;
 
 

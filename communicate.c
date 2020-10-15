@@ -128,6 +128,7 @@ void receive_ball (Ball *ball, char message)
     if (speed_increased) {
         ball_increase_speed (ball);
         ball->speed_increased = false;
+        ball->hit_counter = 0;
     }
 }
 
