@@ -12,9 +12,11 @@
 #define PADDLE_LENGTH 3
 
 
+
 /** Changes the length of the paddle.
  * @param new length of paddle. */
 void paddle_set_length (uint8_t length);
+
 
 
 /** Sets the period of the paddle movement.
@@ -22,13 +24,16 @@ void paddle_set_length (uint8_t length);
 void paddle_set_period (uint16_t period);
 
 
+
 /** Initializes the paddle.
  * @param new_length length of the paddle */
 void paddle_init (uint8_t new_length);
 
 
+
 /** Updates the paddles position when the navswitch is pushed. */
 void paddle_update (void);
+
 
 
 /** Gets the paddle as a single row bitmap.
@@ -36,7 +41,10 @@ void paddle_update (void);
 uint8_t paddle_get_pattern (void);
 
 
+
 /** Updates the ledmat to display the paddle's current postition */
 void paddle_update_display (void);
+
+
 
 #endif

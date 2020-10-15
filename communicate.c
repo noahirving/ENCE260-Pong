@@ -34,10 +34,13 @@
 
 
 
+/** Initiates the infra-red communications */
 void communicate_init (void)
 {
     ir_uart_init ();
 }
+
+
 
 /** Checks if player is ready to start, indicated by a push of the navswitch
  * @return 1 if the navswitch has been pushed, otherwise 0 */
@@ -80,10 +83,9 @@ void send_lost (void)
 void send_ball (Ball* ball)
 {
     char message = 0;
-    // Inverts x position.*/
+    // Inverts x position.
     uint8_t position_x = MAX_X - ball_get_position (ball).x;
 
-    // Inverts direction for mirrored receiver
     invert_x_direction (ball);
 
     // Encodes ball into char.
@@ -100,7 +102,7 @@ void send_ball (Ball* ball)
         ball->speed_increased = false;
     }
 
-    ir_uart_putc (message); // Transfer ball position and vector as single character
+    ir_uart_putc (message);
 
     ball->active = false;
 }

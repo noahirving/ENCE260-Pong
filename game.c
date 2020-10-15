@@ -23,8 +23,9 @@
 #define COUNTDOWN_START '3'
 #define COUNTDOWN_END '0'
 
-// Global variable defining who will start each round
+
 bool starting_player = false;
+
 
 
 /** Set up and initialise text display for ledmat*/
@@ -35,6 +36,7 @@ void tinygl_setup (void)
     tinygl_text_speed_set (MESSAGE_RATE);
     tinygl_text_dir_set (TINYGL_TEXT_DIR_ROTATE);
 }
+
 
 
 /** Initialize system and drivers */
@@ -50,6 +52,7 @@ void game_init (void)
 }
 
 
+
 /** Waits until the passed function returns true
  * @param *func function passed in to be evaluated for true or false */
 void wait_for (bool (*func)(void))
@@ -59,6 +62,7 @@ void wait_for (bool (*func)(void))
         tinygl_update ();
     }
 }
+
 
 
 /** Connects to the opponent by sending ready
@@ -83,6 +87,7 @@ void connect (void)
 }
 
 
+
 /** Displays countdown before each round starts*/
 void countdown (void)
 {
@@ -102,15 +107,15 @@ void countdown (void)
             counter[0]--;
         }
 
-        // Display "GO" when the counter reaches 0
         if (counter[0] == '0') {
             tinygl_text ("GO");
         } else {
-            tinygl_point_t position = COUNTDOWN_POSITION; // Position of character is set to the middle of the rotated ledmat
+            tinygl_point_t position = COUNTDOWN_POSITION;
             tinygl_draw_message (counter, position, 1);
         }
     }
 }
+
 
 
 /** Starts a single round. Plays until one of the players miss the ball */
@@ -124,11 +129,10 @@ void play_round (void)
     countdown ();
     paddle_init (PADDLE_LENGTH);
 
-    // Only display ball for the player who is starting
     if (starting_player) {
         my_ball.active = true;
     }
-    // Begin Round
+
     while (round_running) {
         pacer_wait ();
         paddle_update ();
@@ -196,7 +200,6 @@ int main (void)
         game_init ();
         connect ();
 
-        // Begin Game
         while (!game_finished ()) {
             play_round ();
             display_score ();
